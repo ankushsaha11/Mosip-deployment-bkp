@@ -156,7 +156,7 @@ status:
 
 
 
-resident-ui - Need to check image and edit image and tag
+resident-ui 
 ============
 
 
@@ -225,7 +225,7 @@ spec:
             name: config-server-share
         - configMapRef:
             name: artifactory-share
-        image: docker.io/mosipqa/resident-ui:develop
+        image: docker.io/mosipid/resident-ui:develop
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 6
