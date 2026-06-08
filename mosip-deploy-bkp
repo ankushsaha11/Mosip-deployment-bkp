@@ -1,0 +1,2222 @@
+
+
+
+
+
+https://docs.mosip.io/1.2.0/roadmap-and-releases/releases/resident-services-v0.9.1
+
+kubectl describe pod prereg-ui-6f559bcd6d-xlhxc -n prereg | grep Image
+
+
+
+resident-services
+===================
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "2"
+    meta.helm.sh/release-name: resident
+    meta.helm.sh/release-namespace: resident
+  creationTimestamp: "2026-01-30T09:08:00Z"
+  generation: 2
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: resident
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: resident
+    helm.sh/chart: resident-12.0.1
+  name: resident
+  namespace: resident
+  resourceVersion: "34516258"
+  uid: 4ea3caf0-72ac-4f8d-a76c-7a346574f3c6
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: resident
+      app.kubernetes.io/name: resident
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: "2026-05-22T13:32:06+05:30"
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: resident
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: resident
+        helm.sh/chart: resident-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: resident
+                  app.kubernetes.io/name: resident
+              namespaces:
+              - resident
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms2000M -Xmx2000M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/resident-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /resident/v1/actuator/health
+            port: 8099
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: resident
+        ports:
+        - containerPort: 8099
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /resident/v1/actuator/health
+            port: 8099
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 3000Mi
+          requests:
+            cpu: 100m
+            memory: 1000Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /resident/v1/actuator/health
+            port: 8099
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: resident
+      serviceAccountName: resident
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-05-14T06:55:33Z"
+    lastUpdateTime: "2026-05-14T06:55:33Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2026-01-30T09:08:00Z"
+    lastUpdateTime: "2026-05-22T08:04:27Z"
+    message: ReplicaSet "resident-7bd744fd6f" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 2
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+
+resident-ui - Need to check image and edit image and tag
+============
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "3"
+    meta.helm.sh/release-name: resident-ui
+    meta.helm.sh/release-namespace: resident
+  creationTimestamp: "2026-01-30T09:08:02Z"
+  generation: 3
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: resident-ui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: resident-ui
+    helm.sh/chart: resident-ui-0.0.1
+  name: resident-ui
+  namespace: resident
+  resourceVersion: "32716043"
+  uid: 84a2322b-be4a-4078-8875-1df8b7011111
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: resident-ui
+      app.kubernetes.io/name: resident-ui
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: resident-ui
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: resident-ui
+        helm.sh/chart: resident-ui-0.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: resident-ui
+                  app.kubernetes.io/name: resident-ui
+              namespaces:
+              - resident
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipqa/resident-ui:develop
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        name: resident-ui
+        ports:
+        - containerPort: 8080
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        resources:
+          requests:
+            cpu: 200m
+            memory: 200Mi
+        startupProbe:
+          failureThreshold: 30
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html/assets/config.json
+          name: ui-config
+          subPath: config.json
+        - mountPath: /etc/nginx/conf.d/default.conf
+          name: nginx-config
+          subPath: default.conf
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: resident-ui
+      serviceAccountName: resident-ui
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: config.json
+            path: config.json
+          name: resident-ui
+        name: ui-config
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: default.conf
+            path: default.conf
+          name: resident-ui
+        name: nginx-config
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-02-19T14:19:20Z"
+    lastUpdateTime: "2026-02-19T14:19:20Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2026-01-30T09:08:02Z"
+    lastUpdateTime: "2026-05-16T06:37:39Z"
+    message: ReplicaSet "resident-ui-6b6dc4b67d" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 3
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+
+mosip-config - Needs to check
+==============================
+
+
+
+admin-services
+==============
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: admin-service
+    meta.helm.sh/release-namespace: admin
+  creationTimestamp: "2026-01-29T16:55:05Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: admin-service
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: admin-service
+    helm.sh/chart: admin-service-12.0.1
+  name: admin-service
+  namespace: admin
+  resourceVersion: "38052874"
+  uid: 52340381-d831-452f-8774-4d634598f137
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: admin-service
+      app.kubernetes.io/name: admin-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: admin-service
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: admin-service
+        helm.sh/chart: admin-service-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: admin-service
+                  app.kubernetes.io/name: admin-service
+              namespaces:
+              - admin
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms1250M -Xmx1250M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/admin-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/admin/actuator/health
+            port: 8098
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: admin-service
+        ports:
+        - containerPort: 8098
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/admin/actuator/health
+            port: 8098
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 300m
+            memory: 2000Mi
+          requests:
+            cpu: 100m
+            memory: 1000Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /v1/admin/actuator/health
+            port: 8098
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: admin-service-foo
+      serviceAccountName: admin-service-foo
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-29T16:55:05Z"
+    lastUpdateTime: "2026-01-29T16:59:16Z"
+    message: ReplicaSet "admin-service-cf4b8d8bc" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-06-03T08:39:34Z"
+    lastUpdateTime: "2026-06-03T08:39:34Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+
+ida-auth
+=========
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: ida-auth
+    meta.helm.sh/release-namespace: ida
+  creationTimestamp: "2026-01-30T06:26:20Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: ida-auth
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ida-auth
+    helm.sh/chart: ida-auth-12.0.1
+  name: ida-auth
+  namespace: ida
+  resourceVersion: "35674992"
+  uid: aab38e9b-f011-4368-ba03-fa2e20b773f7
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: ida-auth
+      app.kubernetes.io/name: ida-auth
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: ida-auth
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: ida-auth
+        helm.sh/chart: ida-auth-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: ida-auth
+                  app.kubernetes.io/name: ida-auth
+              namespaces:
+              - ida
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms2000M -Xmx2000M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        - configMapRef:
+            name: softhsm-ida-share
+        image: docker.io/mosipid/authentication-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /idauthentication/v1/actuator/health
+            port: 8090
+            scheme: HTTP
+          initialDelaySeconds: 120
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: ida-auth
+        ports:
+        - containerPort: 8090
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /idauthentication/v1/actuator/health
+            port: 8090
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 4500m
+            memory: 4000Mi
+          requests:
+            cpu: 100m
+            memory: 1000Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /idauthentication/v1/actuator/health
+            port: 8090
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: ida-auth
+      serviceAccountName: ida-auth
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-30T06:26:20Z"
+    lastUpdateTime: "2026-01-30T06:27:51Z"
+    message: ReplicaSet "ida-auth-8fd97c6d5" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-05-26T06:33:39Z"
+    lastUpdateTime: "2026-05-26T06:33:39Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+
+ida-internal
+=============
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: ida-internal
+    meta.helm.sh/release-namespace: ida
+  creationTimestamp: "2026-01-30T06:26:22Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: ida-internal
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ida-internal
+    helm.sh/chart: ida-internal-12.0.1
+  name: ida-internal
+  namespace: ida
+  resourceVersion: "35675456"
+  uid: 16868568-89cf-488e-b7fd-cd9c43a510d6
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: ida-internal
+      app.kubernetes.io/name: ida-internal
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: ida-internal
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: ida-internal
+        helm.sh/chart: ida-internal-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: ida-internal
+                  app.kubernetes.io/name: ida-internal
+              namespaces:
+              - ida
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms2000M -Xmx2000M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        - configMapRef:
+            name: softhsm-ida-share
+        image: docker.io/mosipid/authentication-internal-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /idauthentication/v1/internal/actuator/health
+            port: 8093
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: ida-internal
+        ports:
+        - containerPort: 8093
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /idauthentication/v1/internal/actuator/health
+            port: 8093
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "3"
+            memory: 3000Mi
+          requests:
+            cpu: 100m
+            memory: 1500Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /idauthentication/v1/internal/actuator/health
+            port: 8093
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: ida-internal
+      serviceAccountName: ida-internal
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-30T06:26:23Z"
+    lastUpdateTime: "2026-01-30T06:27:33Z"
+    message: ReplicaSet "ida-internal-67ddbfdd7" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-05-26T06:35:42Z"
+    lastUpdateTime: "2026-05-26T06:35:42Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+ida-otp
+=======
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: ida-otp
+    meta.helm.sh/release-namespace: ida
+  creationTimestamp: "2026-01-30T06:26:25Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: ida-otp
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ida-otp
+    helm.sh/chart: ida-otp-12.0.1
+  name: ida-otp
+  namespace: ida
+  resourceVersion: "35675928"
+  uid: 77229163-aee2-4591-9d62-1ef84a025ae7
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: ida-otp
+      app.kubernetes.io/name: ida-otp
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: ida-otp
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: ida-otp
+        helm.sh/chart: ida-otp-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: ida-otp
+                  app.kubernetes.io/name: ida-otp
+              namespaces:
+              - ida
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms2000M -Xmx2000M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        - configMapRef:
+            name: softhsm-ida-share
+        image: docker.io/mosipid/authentication-otp-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /idauthentication/v1/otp/actuator/health
+            port: 8092
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: ida-otp
+        ports:
+        - containerPort: 8092
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /idauthentication/v1/otp/actuator/health
+            port: 8092
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "3"
+            memory: 3000Mi
+          requests:
+            cpu: 100m
+            memory: 1000Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /idauthentication/v1/otp/actuator/health
+            port: 8092
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: ida-otp
+      serviceAccountName: ida-otp
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-30T06:26:25Z"
+    lastUpdateTime: "2026-01-30T06:27:25Z"
+    message: ReplicaSet "ida-otp-54f879f89f" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-05-26T06:37:44Z"
+    lastUpdateTime: "2026-05-26T06:37:44Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+
+idrepo-credential
+==================
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: credential
+    meta.helm.sh/release-namespace: idrepo
+  creationTimestamp: "2026-01-29T14:49:40Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: credential
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: credential
+    helm.sh/chart: credential-12.0.1
+  name: credential
+  namespace: idrepo
+  resourceVersion: "35734414"
+  uid: 7cf672a7-bc25-48b9-993f-3a65c467c7ac
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: credential
+      app.kubernetes.io/name: credential
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: credential
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: credential
+        helm.sh/chart: credential-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: credential
+                  app.kubernetes.io/name: credential
+              namespaces:
+              - idrepo
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms2000M -Xmx2000M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/credential-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/credentialservice/actuator/health
+            port: 8095
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: credential
+        ports:
+        - containerPort: 8095
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/credentialservice/actuator/health
+            port: 8095
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 3000Mi
+          requests:
+            cpu: 100m
+            memory: 1500Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /v1/credentialservice/actuator/health
+            port: 8095
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: credential
+      serviceAccountName: credential
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-29T14:49:40Z"
+    lastUpdateTime: "2026-01-29T14:51:21Z"
+    message: ReplicaSet "credential-84b9f9977b" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-05-26T11:22:21Z"
+    lastUpdateTime: "2026-05-26T11:22:21Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+idrepo-credentialrequest
+=========================
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: credentialrequest
+    meta.helm.sh/release-namespace: idrepo
+  creationTimestamp: "2026-01-29T14:49:42Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: credentialrequest
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: credentialrequest
+    helm.sh/chart: credentialrequest-12.0.1
+  name: credentialrequest
+  namespace: idrepo
+  resourceVersion: "32126263"
+  uid: 1e1bcffd-c58e-4226-a38d-8b4607d69519
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: credentialrequest
+      app.kubernetes.io/name: credentialrequest
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: credentialrequest
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: credentialrequest
+        helm.sh/chart: credentialrequest-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: credentialrequest
+                  app.kubernetes.io/name: credentialrequest
+              namespaces:
+              - idrepo
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms3000M -Xmx3000M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/credential-request-generator:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/credentialrequest/actuator/health
+            port: 8094
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: credentialrequest
+        ports:
+        - containerPort: 8094
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/credentialrequest/actuator/health
+            port: 8094
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "1"
+            memory: 4000Mi
+          requests:
+            cpu: 100m
+            memory: 1000Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /v1/credentialrequest/actuator/health
+            port: 8094
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: credentialrequest
+      serviceAccountName: credentialrequest
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-29T14:49:42Z"
+    lastUpdateTime: "2026-01-29T14:50:42Z"
+    message: ReplicaSet "credentialrequest-54cfc557d8" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-05-14T06:53:24Z"
+    lastUpdateTime: "2026-05-14T06:53:24Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+idrepo-identity
+===============
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: identity
+    meta.helm.sh/release-namespace: idrepo
+  creationTimestamp: "2026-01-29T14:49:43Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: identity
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: identity
+    helm.sh/chart: identity-12.0.1
+  name: identity
+  namespace: idrepo
+  resourceVersion: "32126163"
+  uid: 76032760-6ab9-4c01-b516-f7c122cc8735
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: identity
+      app.kubernetes.io/name: identity
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: identity
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: identity
+        helm.sh/chart: identity-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: identity
+                  app.kubernetes.io/name: identity
+              namespaces:
+              - idrepo
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms2000M -Xmx2000M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/id-repository-identity-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /idrepository/v1/identity/actuator/health
+            port: 8090
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: identity
+        ports:
+        - containerPort: 8090
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /idrepository/v1/identity/actuator/health
+            port: 8090
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "1"
+            memory: 4000Mi
+          requests:
+            cpu: 100m
+            memory: 1500Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /idrepository/v1/identity/actuator/health
+            port: 8090
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: identity
+      serviceAccountName: identity
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-29T14:49:43Z"
+    lastUpdateTime: "2026-01-29T14:51:04Z"
+    message: ReplicaSet "identity-7744f448fb" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-05-14T06:53:21Z"
+    lastUpdateTime: "2026-05-14T06:53:21Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+
+idrepo-vid
+===========
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: vid
+    meta.helm.sh/release-namespace: idrepo
+  creationTimestamp: "2026-01-29T14:49:45Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: vid
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vid
+    helm.sh/chart: vid-12.0.1
+  name: vid
+  namespace: idrepo
+  resourceVersion: "32126234"
+  uid: f574b9ed-af7a-4850-b65a-62181b230d45
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vid
+      app.kubernetes.io/name: vid
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: vid
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: vid
+        helm.sh/chart: vid-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: vid
+                  app.kubernetes.io/name: vid
+              namespaces:
+              - idrepo
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms1000M -Xmx1000M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/id-repository-vid-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /idrepository/v1/actuator/health
+            port: 8091
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: vid
+        ports:
+        - containerPort: 8091
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /idrepository/v1/actuator/health
+            port: 8091
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 3000Mi
+          requests:
+            cpu: 100m
+            memory: 1500Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /idrepository/v1/actuator/health
+            port: 8091
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: vid
+      serviceAccountName: vid
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-29T14:49:45Z"
+    lastUpdateTime: "2026-01-29T14:51:16Z"
+    message: ReplicaSet "vid-6dc6cc48d4" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-05-14T06:53:22Z"
+    lastUpdateTime: "2026-05-14T06:53:22Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+pms-partner
+============
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: pms-partner
+    meta.helm.sh/release-namespace: pms
+  creationTimestamp: "2026-01-29T14:53:30Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: pms-partner
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: pms-partner
+    helm.sh/chart: pms-partner-12.0.1
+  name: pms-partner
+  namespace: pms
+  resourceVersion: "37927722"
+  uid: 9adac1d3-aafe-4151-b5eb-e89694546f46
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: pms-partner
+      app.kubernetes.io/name: pms-partner
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: pms-partner
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: pms-partner
+        helm.sh/chart: pms-partner-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: pms-partner
+                  app.kubernetes.io/name: pms-partner
+              namespaces:
+              - pms
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms2750M -Xmx2750M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/partner-management-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/partnermanager/actuator/health
+            port: 9109
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: pms-partner
+        ports:
+        - containerPort: 9109
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/partnermanager/actuator/health
+            port: 9109
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 700m
+            memory: 3500Mi
+          requests:
+            cpu: 100m
+            memory: 1000Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /v1/partnermanager/actuator/health
+            port: 9109
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: pms-partner
+      serviceAccountName: pms-partner
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-29T14:53:30Z"
+    lastUpdateTime: "2026-01-29T15:00:11Z"
+    message: ReplicaSet "pms-partner-5bf65bdbc8" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-06-02T22:24:20Z"
+    lastUpdateTime: "2026-06-02T22:24:20Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+
+pms-Policy
+==========
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: pms-policy
+    meta.helm.sh/release-namespace: pms
+  creationTimestamp: "2026-01-29T14:53:31Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: pms-policy
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: pms-policy
+    helm.sh/chart: pms-policy-12.0.1
+  name: pms-policy
+  namespace: pms
+  resourceVersion: "32126258"
+  uid: 7954e281-cc24-4d13-8f3b-30eae9175629
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: pms-policy
+      app.kubernetes.io/name: pms-policy
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: pms-policy
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: pms-policy
+        helm.sh/chart: pms-policy-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: pms-policy
+                  app.kubernetes.io/name: pms-policy
+              namespaces:
+              - pms
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms2250M -Xmx2250M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/policy-management-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/policymanager/actuator/health
+            port: 9107
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: pms-policy
+        ports:
+        - containerPort: 9107
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/policymanager/actuator/health
+            port: 9107
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 3000Mi
+          requests:
+            cpu: 100m
+            memory: 1000Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /v1/policymanager/actuator/health
+            port: 9107
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: pms-policy
+      serviceAccountName: pms-policy
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-29T14:53:32Z"
+    lastUpdateTime: "2026-01-29T15:02:23Z"
+    message: ReplicaSet "pms-policy-54bd5ddd4c" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-05-14T06:53:24Z"
+    lastUpdateTime: "2026-05-14T06:53:24Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+
+
+admin-hotlist
+==============
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: admin-hotlist
+    meta.helm.sh/release-namespace: admin
+  creationTimestamp: "2026-01-29T16:55:03Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: admin-hotlist
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: admin-hotlist
+    helm.sh/chart: admin-hotlist-12.0.1
+  name: admin-hotlist
+  namespace: admin
+  resourceVersion: "32126091"
+  uid: debc1dde-71de-43b6-ba72-9fee309113d4
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: admin-hotlist
+      app.kubernetes.io/name: admin-hotlist
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: admin-hotlist
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: admin-hotlist
+        helm.sh/chart: admin-hotlist-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: admin-hotlist
+                  app.kubernetes.io/name: admin-hotlist
+              namespaces:
+              - admin
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms750M -Xmx750M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/hotlist-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/hotlist/actuator/health
+            port: 8095
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: admin-hotlist
+        ports:
+        - containerPort: 8095
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/hotlist/actuator/health
+            port: 8095
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 300m
+            memory: 1500Mi
+          requests:
+            cpu: 100m
+            memory: 1000Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /v1/hotlist/actuator/health
+            port: 8095
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: admin-hotlist-foo
+      serviceAccountName: admin-hotlist-foo
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-29T16:55:03Z"
+    lastUpdateTime: "2026-01-29T16:57:44Z"
+    message: ReplicaSet "admin-hotlist-68f688cc88" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-05-14T06:53:16Z"
+    lastUpdateTime: "2026-05-14T06:53:16Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+
+kernel-masterdata
+==================
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: masterdata
+    meta.helm.sh/release-namespace: kernel
+  creationTimestamp: "2026-01-30T07:01:45Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: masterdata
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: masterdata
+    helm.sh/chart: masterdata-12.0.1
+  name: masterdata
+  namespace: kernel
+  resourceVersion: "32126126"
+  uid: c340bba9-a645-4513-9bb8-f4714ab551db
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: masterdata
+      app.kubernetes.io/name: masterdata
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: masterdata
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: masterdata
+        helm.sh/chart: masterdata-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: masterdata
+                  app.kubernetes.io/name: masterdata
+              namespaces:
+              - kernel
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms1500M -Xmx1500M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/kernel-masterdata-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/masterdata/actuator/health
+            port: 8086
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: masterdata
+        ports:
+        - containerPort: 8086
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/masterdata/actuator/health
+            port: 8086
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 2250Mi
+          requests:
+            cpu: 100m
+            memory: 1500Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /v1/masterdata/actuator/health
+            port: 8086
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: masterdata
+      serviceAccountName: masterdata
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-30T07:01:45Z"
+    lastUpdateTime: "2026-01-30T07:04:06Z"
+    message: ReplicaSet "masterdata-76cff79966" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-05-14T06:53:19Z"
+    lastUpdateTime: "2026-05-14T06:53:19Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+
+kernel-syncdata-service 
+========================
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: syncdata
+    meta.helm.sh/release-namespace: kernel
+  creationTimestamp: "2026-01-30T07:02:05Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: syncdata
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: syncdata
+    helm.sh/chart: syncdata-12.0.1
+  name: syncdata
+  namespace: kernel
+  resourceVersion: "32145102"
+  uid: 473511d6-b3aa-4309-ba03-07e6e160c1aa
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: syncdata
+      app.kubernetes.io/name: syncdata
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: syncdata
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: syncdata
+        helm.sh/chart: syncdata-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: syncdata
+                  app.kubernetes.io/name: syncdata
+              namespaces:
+              - kernel
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms4000M -Xmx4000M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/kernel-syncdata-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/syncdata/actuator/health
+            port: 8089
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: syncdata
+        ports:
+        - containerPort: 8089
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/syncdata/actuator/health
+            port: 8089
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 5000Mi
+          requests:
+            cpu: 100m
+            memory: 1500Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /v1/syncdata/actuator/health
+            port: 8089
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: syncdata
+      serviceAccountName: syncdata
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-30T07:02:05Z"
+    lastUpdateTime: "2026-01-30T07:03:57Z"
+    message: ReplicaSet "syncdata-556ff6bf7b" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-05-14T08:22:15Z"
+    lastUpdateTime: "2026-05-14T08:22:15Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+
+
+
+
+
+
