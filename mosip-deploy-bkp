@@ -12,7 +12,15 @@ kubectl describe pod prereg-ui-6f559bcd6d-xlhxc -n prereg | grep Image
 resident-services
 ===================
 
-Image tag version : 1.2.1.1 issue as crashloopbackoff
+Image tag version : 1.2.1.1, we have done below changes in resident-default properties file
+
+mosip-config : config-server
+----------------------------------------------
+redistent-default-properties
+mosip.resident.request.credential.encryption.key=test123
+resident.websub.regproc.workflow.complete.secret=test123
+
+
 
 apiVersion: apps/v1
 kind: Deployment
