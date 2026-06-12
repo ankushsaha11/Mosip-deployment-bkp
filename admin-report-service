@@ -1,0 +1,131 @@
+1. Deployment Manifest
+File: admin-report-service-deployment.yaml
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-report-service
+  namespace: admin
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: admin-report-service
+    app.kubernetes.io/managed-by: kubectl
+    app.kubernetes.io/name: admin-report-service
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: admin-report-service
+      app.kubernetes.io/name: admin-report-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: admin-report-service
+        app.kubernetes.io/name: admin-report-service
+        app.kubernetes.io/component: mosip
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: admin-report-service
+                    app.kubernetes.io/name: admin-report-service
+                namespaces:
+                  - admin
+      containers:
+        - name: admin-report-service
+          image: apwrd2/reportservice:11062026-2_DEV
+          imagePullPolicy: Always
+          ports:
+            - name: spring-service
+              containerPort: 8091
+              protocol: TCP
+          env:
+            - name: container_user
+              value: mosip
+            - name: JDK_JAVA_OPTIONS
+              value: "-Xms512M -Xmx750M"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "sandbox"
+            - name: SERVER_PORT
+              value: "8091"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8091
+              scheme: HTTP
+            initialDelaySeconds: 40
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 6
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8091
+              scheme: HTTP
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+            successThreshold: 1
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8091
+              scheme: HTTP
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
+            successThreshold: 1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 500Mi
+            limits:
+              cpu: 500m
+              memory: 1500Mi
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+
+
+
+
+
+2. Service Manifest
+File: admin-report-service-svc.yaml
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-report-service
+  namespace: admin
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: admin-report-service
+    app.kubernetes.io/managed-by: kubectl
+    app.kubernetes.io/name: admin-report-service
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80           # Service port (clients call svc:80)
+      targetPort: 8091   # Container/app port
+      protocol: TCP
+  selector:
+    app.kubernetes.io/instance: admin-report-service
+    app.kubernetes.io/name: admin-report-service
+  sessionAffinity: None
+
