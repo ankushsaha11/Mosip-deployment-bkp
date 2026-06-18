@@ -129,3 +129,71 @@ spec:
     app.kubernetes.io/name: admin-report-service
   sessionAffinity: None
 
+
+
+
+3. Virtualservice Mnaifest
+File : admin-report-service-virtualservice.yaml
+
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: admin-report-service
+  namespace: admin
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: admin-report-service
+    app.kubernetes.io/managed-by: kubectl
+    app.kubernetes.io/name: admin-report-service
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - istio-system/internal
+  http:
+    - corsPolicy:
+        allowCredentials: true
+        allowHeaders:
+          - Accept
+          - Accept-Encoding
+          - Accept-Language
+          - Connection
+          - Content-Type
+          - Cookie
+          - Host
+          - Referer
+          - Sec-Fetch-Dest
+          - Sec-Fetch-Mode
+          - Sec-Fetch-Site
+          - Sec-Fetch-User
+          - Origin
+          - Upgrade-Insecure-Requests
+          - User-Agent
+          - sec-ch-ua
+          - sec-ch-ua-mobile
+          - sec-ch-ua-platform
+          - x-xsrf-token
+          - xsrf-token
+          - Authorization
+        allowMethods:
+          - GET
+          - POST
+          - PATCH
+          - PUT
+          - DELETE
+          - OPTIONS
+        allowOrigins:
+          - prefix: https://admin.mosip-sandbox.svgdev.net
+          - prefix: https://api-internal.mosip-sandbox.svgdev.net
+      headers:
+        request:
+          set:
+            x-forwarded-proto: https
+      match:
+        - uri:
+            prefix: /v1/report
+      route:
+        - destination:
+            host: admin-report-service
+            port:
+              number: 80
