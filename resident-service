@@ -141,6 +141,11 @@ status:
 
 
 
+To build the package jar file : mvn clean package -Dmaven.javadoc.skip=true -DskipTests
+-------------------------------
+
+
+
 
 Dockerfile : 
 ============
