@@ -138,6 +138,9 @@ status:
   updatedReplicas: 1
 
 
+To build the package jar file : mvn clean install -DskipTests -Dmaven.javadoc.skip=true
+-------------------------------
+
 
 Dockerfile :
 ============
