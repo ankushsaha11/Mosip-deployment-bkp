@@ -146,3 +146,7 @@ status:
   readyReplicas: 1
   replicas: 1
   updatedReplicas: 1
+
+
+
+To build : NODE_OPTIONS=--openssl-legacy-provider ng build --base-href "." --output-path=dist
