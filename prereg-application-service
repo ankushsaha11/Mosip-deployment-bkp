@@ -1,0 +1,138 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: prereg-application
+    meta.helm.sh/release-namespace: prereg
+  creationTimestamp: "2026-01-29T14:41:52Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: prereg-application
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prereg-application
+    helm.sh/chart: prereg-application-12.0.1
+  name: prereg-application
+  namespace: prereg
+  resourceVersion: "44008218"
+  uid: f57d09f2-c3f0-4af2-8297-d97c42c90f6f
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: prereg-application
+      app.kubernetes.io/name: prereg-application
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: prereg-application
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: prereg-application
+        helm.sh/chart: prereg-application-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: prereg-application
+                  app.kubernetes.io/name: prereg-application
+              namespaces:
+              - prereg
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms2000M -Xmx2000M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/pre-registration-application-service:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /preregistration/v1/actuator/health
+            port: 9090
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: prereg-application
+        ports:
+        - containerPort: 9090
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /preregistration/v1/actuator/health
+            port: 9090
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "1"
+            memory: 2500Mi
+          requests:
+            cpu: 200m
+            memory: 1500Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /preregistration/v1/actuator/health
+            port: 9090
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: prereg-application
+      serviceAccountName: prereg-application
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-29T14:41:52Z"
+    lastUpdateTime: "2026-01-29T14:44:43Z"
+    message: ReplicaSet "prereg-application-779f9784fb" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-06-23T13:19:38Z"
+    lastUpdateTime: "2026-06-23T13:19:38Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
