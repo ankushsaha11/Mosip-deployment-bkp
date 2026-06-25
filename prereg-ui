@@ -1,0 +1,5 @@
+prereg-ui:
+ Image:      docker.io/mosipid/pre-registration-ui:1.2.0.1
+
+
+
