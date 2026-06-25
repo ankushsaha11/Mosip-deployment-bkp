@@ -3,3 +3,5 @@ prereg-ui:
 
 
 
+To Build : ng build "--base-href" "." "--output-path=dist"
+----------
