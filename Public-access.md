@@ -7,7 +7,7 @@ Esignet and Resident portal is publicly accessible with below steps undertaken :
 1. We have added DNS records for esignet.mosip-sandbox.svgdev.net and mapped to public IP : 20.235.90.185 (No further changes for esignet)
    Similary, we have added DNS records for resident.mosip-sandbox.svgdev.net and mapped to public IP : 20.235.90.185.
 
-  In addition to adding DNS records for resident portal, we have also changed configmap configuration of resident-ui like below "baseUrl":"https://api-internal  ---> "baseUrl":"https://api.mosip-sandbox.svgdev.net
+2. In addition to adding DNS records for resident portal, we have also changed configmap configuration of resident-ui like below "baseUrl":"https://api-internal  ---> "baseUrl":"https://api.mosip-sandbox.svgdev.net
 
 data:
     config.json: |-
