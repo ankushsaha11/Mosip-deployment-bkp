@@ -2,7 +2,10 @@ https://github.com/mosip/k8s-infra/blob/v1.2.0.2/docs/public-access.md
 
 We need to make prereg, resident and esignet portal publicly accessible which is citizen centric
 
-Esignet and Resident portal is publicly accessible with below steps undertaken :
+
+
+
+**Esignet and Resident portal is publicly accessible with below steps undertaken :**
 
 1. We have added DNS records for esignet.mosip-sandbox.svgdev.net and mapped to public IP : 20.235.90.185 (No further changes for esignet)
    Similary, we have added DNS records for resident.mosip-sandbox.svgdev.net and mapped to public IP : 20.235.90.185.
