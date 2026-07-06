@@ -153,3 +153,7 @@ status:
   readyReplicas: 1
   replicas: 1
   updatedReplicas: 1
+
+
+
+To build : docker build -t esignet-ui:06072026-1_DEV .
