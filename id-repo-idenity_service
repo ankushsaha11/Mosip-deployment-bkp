@@ -138,7 +138,7 @@ status:
   updatedReplicas: 1
 
 
-To build the package jar file : mvn clean install -DskipTests -Dmaven.javadoc.skip=true
+To build the package jar file : mvn clean install -DskipTests -Dmaven.javadoc.skip=true -Dgpg.skip=true
 -------------------------------
 
 
