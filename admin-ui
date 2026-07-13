@@ -1,0 +1,42 @@
+Pod Template:
+  Labels:       app.kubernetes.io/instance=admin-ui
+        app.kubernetes.io/managed-by=Helm
+        app.kubernetes.io/name=admin-ui
+        helm.sh/chart=admin-ui-12.0.1
+        pod-template-hash=844894cff9
+  Service Account:      admin-ui-foo
+  Containers:
+   admin-ui:
+    Image:      docker.io/mosipid/admin-ui:1.2.0.1
+    Port:       8080/TCP (spring-service)
+    Host Port:  0/TCP (spring-service)
+    Limits:
+      cpu:      300m
+      memory:   1500Mi
+    Requests:
+      cpu:      100m
+      memory:   500Mi
+    Liveness:   http-get http://:8080/ delay=20s timeout=5s period=30s #success=1 #failure=6
+    Readiness:  http-get http://:8080/ delay=0s timeout=5s period=10s #success=1 #failure=6
+    Startup:    http-get http://:8080/ delay=0s timeout=5s period=10s #success=1 #failure=30
+    Environment Variables from:
+      global    ConfigMap       Optional: false
+      config-server-share       ConfigMap       Optional: false
+      artifactory-share ConfigMap       Optional: false
+    Environment:
+      container_user:   mosip
+      JDK_JAVA_OPTIONS: -Xms750M -Xmx750M
+    Mounts:
+      /etc/nginx/conf.d/default.conf from nginx-config (rw,path="default.conf")
+      /usr/share/nginx/html/assets/config.json from conf-file (rw,path="config.json")
+  Volumes:
+   conf-file:
+    Type:       ConfigMap (a volume populated by a ConfigMap)
+    Name:       admin-ui
+    Optional:   false
+   nginx-config:
+    Type:       ConfigMap (a volume populated by a ConfigMap)
+    Name:       admin-ui
+    Optional:   false
+  Node-Selectors:       <none>
+  Tolerations:  <none>
