@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: regproc-reprocess
+    meta.helm.sh/release-namespace: regproc
+  creationTimestamp: "2026-01-29T16:26:15Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: regproc-reprocess
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: regproc-reprocess
+    helm.sh/chart: regproc-reprocess-12.0.1
+  name: regproc-reprocess
+  namespace: regproc
+  resourceVersion: "32126074"
+  uid: 03e53ca6-585e-4af3-ad1a-99f0dc24959c
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: regproc-reprocess
+      app.kubernetes.io/name: regproc-reprocess
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: regproc-reprocess
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: regproc-reprocess
+        helm.sh/chart: regproc-reprocess-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: regproc-reprocess
+                  app.kubernetes.io/name: regproc-reprocess
+              namespaces:
+              - regproc
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms2000M -Xmx2000M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/registration-processor-reprocessor:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /registrationprocessor/v1/reprocessor/actuator/health
+            port: 8021
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: regproc-reprocess
+        ports:
+        - containerPort: 8021
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /registrationprocessor/v1/reprocessor/actuator/health
+            port: 8021
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 2500Mi
+          requests:
+            cpu: 100m
+            memory: 1000Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /registrationprocessor/v1/reprocessor/actuator/health
+            port: 8021
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: regproc-reprocess
+      serviceAccountName: regproc-reprocess
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-29T16:26:34Z"
+    lastUpdateTime: "2026-01-29T16:28:08Z"
+    message: ReplicaSet "regproc-reprocess-c8b5f5977" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-05-14T06:53:15Z"
+    lastUpdateTime: "2026-05-14T06:53:15Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
