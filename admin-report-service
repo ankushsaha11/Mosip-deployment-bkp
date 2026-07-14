@@ -197,3 +197,7 @@ spec:
             host: admin-report-service
             port:
               number: 80
+
+
+To build : mvn clean package -DskipTests
+----------
