@@ -40,3 +40,8 @@ Pod Template:
     Optional:   false
   Node-Selectors:       <none>
   Tolerations:  <none>
+
+
+
+To build : ng build "--base-href" "." "--output-path=dist"
+----------
