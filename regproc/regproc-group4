@@ -1,0 +1,148 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: regproc-group4
+    meta.helm.sh/release-namespace: regproc
+  creationTimestamp: "2026-01-29T16:25:42Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: regproc-group4
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: regproc-group4
+    helm.sh/chart: regproc-group4-12.0.1
+  name: regproc-group4
+  namespace: regproc
+  resourceVersion: "42896612"
+  uid: f4d65860-30e6-47d7-84f1-41f6f0c15bf3
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: regproc-group4
+      app.kubernetes.io/name: regproc-group4
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: regproc-group4
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: regproc-group4
+        helm.sh/chart: regproc-group4-12.0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: regproc-group4
+                  app.kubernetes.io/name: regproc-group4
+              namespaces:
+              - regproc
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms3000M -Xmx3000M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/registration-processor-stage-group-4:1.2.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - MY_PROBE_CHECK_PATHS="http://localhost:8020/registrationprocessor/v1/bioauth/actuator/health,http://localhost:8091/registrationprocessor/v1/demodedupe/actuator/health";
+              i=1; for str in $(echo $MY_PROBE_CHECK_PATHS | sed "s/,/\n/g"); do curl_output="$(curl
+              -w %{http_code} -o /dev/null -s $str)"; if ! [ "$curl_output" = "200"
+              ]; then echo "$str failed with status code $curl_output" >> /dev/stderr
+              && exit $i; fi; ((i++)); done
+          failureThreshold: 6
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: regproc-group4
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - MY_PROBE_CHECK_PATHS="http://localhost:8020/registrationprocessor/v1/bioauth/actuator/health,http://localhost:8091/registrationprocessor/v1/demodedupe/actuator/health";
+              i=1; for str in $(echo $MY_PROBE_CHECK_PATHS | sed "s/,/\n/g"); do curl_output="$(curl
+              -w %{http_code} -o /dev/null -s $str)"; if ! [ "$curl_output" = "200"
+              ]; then echo "$str failed with status code $curl_output" >> /dev/stderr
+              && exit $i; fi; ((i++)); done
+          failureThreshold: 6
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 4000Mi
+          requests:
+            cpu: 100m
+            memory: 1000Mi
+        startupProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - MY_PROBE_CHECK_PATHS="http://localhost:8020/registrationprocessor/v1/bioauth/actuator/health,http://localhost:8091/registrationprocessor/v1/demodedupe/actuator/health";
+              for str in $(echo $MY_PROBE_CHECK_PATHS | sed "s/,/\n/g"); do curl_output="$(curl
+              -w %{http_code} -o /dev/null -s $str)"; if ! [ "$curl_output" = "200"
+              ]; then exit 1; fi; done
+          failureThreshold: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: regproc-group4
+      serviceAccountName: regproc-group4
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-01-29T16:25:42Z"
+    lastUpdateTime: "2026-01-29T16:28:04Z"
+    message: ReplicaSet "regproc-group4-8674cf4767" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-06-19T17:51:53Z"
+    lastUpdateTime: "2026-06-19T17:51:53Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
