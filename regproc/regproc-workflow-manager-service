@@ -139,3 +139,15 @@ status:
   readyReplicas: 1
   replicas: 1
   updatedReplicas: 1
+
+
+
+To Build : 
+----------
+
+mvn clean install \
+  -DskipTests \
+  -Dgpg.skip=true \
+  -Dmaven.javadoc.skip=true \
+  -pl workflow-engine/registration-processor-workflow-manager-service \
+  -am
