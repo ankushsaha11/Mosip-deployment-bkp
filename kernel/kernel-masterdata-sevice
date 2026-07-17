@@ -136,3 +136,9 @@ status:
   readyReplicas: 1
   replicas: 1
   updatedReplicas: 1
+
+
+To Build :
+----------
+
+mvn clean package -Dmaven.javadoc.skip=true -DskipTets=true
