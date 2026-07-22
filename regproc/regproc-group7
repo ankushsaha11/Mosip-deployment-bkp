@@ -147,3 +147,15 @@ status:
   readyReplicas: 1
   replicas: 1
   updatedReplicas: 1
+
+
+
+To Build : 
+----------
+
+mvn clean install \
+  -pl post-processor/registration-processor-credential-requestor-stage \
+  -am \
+  -DskipTests \
+  -Dgpg.skip=true \
+  -Dmaven.javadoc.skip=true
