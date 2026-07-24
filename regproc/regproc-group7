@@ -154,8 +154,8 @@ To Build :
 ----------
 
 mvn clean install \
-  -pl post-processor/registration-processor-credential-requestor-stage \
+  -pl registration-processor/stage-groups/registration-processor-stage-group-7 \
   -am \
-  -DskipTests \
+  -DskipTests
   -Dgpg.skip=true \
   -Dmaven.javadoc.skip=true
