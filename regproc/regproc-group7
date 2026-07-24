@@ -154,7 +154,7 @@ To Build :
 ----------
 
 mvn clean install \
-  -pl registration-processor/stage-groups/registration-processor-stage-group-7 \
+  -pl stage-groups/registration-processor-stage-group-7 \
   -am \
   -DskipTests
   -Dgpg.skip=true \
