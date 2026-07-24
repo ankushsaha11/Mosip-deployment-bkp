@@ -156,6 +156,6 @@ To Build :
 mvn clean install \
   -pl stage-groups/registration-processor-stage-group-7 \
   -am \
-  -DskipTests
+  -DskipTests \
   -Dgpg.skip=true \
   -Dmaven.javadoc.skip=true
