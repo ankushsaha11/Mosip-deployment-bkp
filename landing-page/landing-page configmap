@@ -1,0 +1,1612 @@
+APWRD-Server-VM01@APWRD-Server-VM:~/svg/landing-page$ kubectl get cm landing-page-index -n landing-page -o yaml
+apiVersion: v1
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <title>MOSIP mosip-sandbox</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+
+      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+      <style>
+        :root {
+          --blue: #2d55a2;
+          --blue-dark: #223f7d;
+          --blue-deep: #132a55;
+          --blue-soft: #edf4ff;
+          --gold: #efc44b;
+          --gold-dark: #c99212;
+
+          --page: #f4f7fb;
+          --white: #ffffff;
+          --text: #14213d;
+          --muted: #667085;
+          --border: #dce5f3;
+
+          --shadow-sm: 0 8px 22px rgba(19, 42, 85, 0.08);
+          --shadow-md: 0 16px 42px rgba(19, 42, 85, 0.12);
+          --shadow-lg: 0 28px 70px rgba(19, 42, 85, 0.18);
+
+          --radius-xl: 28px;
+          --radius-lg: 22px;
+          --radius-md: 16px;
+
+          --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='60' viewBox='0 0 220 60'%3E%3Cg fill='none' stroke='%231d3f7d' stroke-opacity='0.22' stroke-width='2'%3E%3Cpath d='M10 18c8-10 22-10 30 0s22 10 30 0 22-10 30 0'/%3E%3Cpath d='M0 45c10-12 24-12 34 0s24 12 34 0 24-12 34 0'/%3E%3Cpath d='M55 8c8 6 8 18 0 24-8 6-8 18 0 24'/%3E%3Cpath d='M145 5c10 8 10 22 0 30-10 8-10 22 0 30'/%3E%3Cpath d='M95 18c6-6 16-6 22 0 6 6 16 6 22 0'/%3E%3Cpath d='M175 20c6-8 18-8 24 0 6 8 18 8 24 0'/%3E%3C/g%3E%3C/svg%3E"),
+          linear-gradient(to bottom, #2E57A5, #2D55A2 45%, #2A519C);
+          background-repeat: repeat;
+          background-size: 220px 60px, 100% 100%;
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+
+        html {
+          min-height: 100%;
+          background: var(--page);
+        }
+
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        a,
+        td {
+          font-family: "Inter", Roboto, Arial, sans-serif;
+        }
+
+        body {
+          min-height: 100vh;
+          margin: 0;
+          padding-bottom: 66px;
+          color: var(--text);
+          background:
+            radial-gradient(circle at 6% 7%, rgba(239, 196, 75, 0.22), transparent 28%),
+            radial-gradient(circle at 100% 8%, rgba(45, 85, 162, 0.18), transparent 28%),
+            linear-gradient(180deg, #ffffff 0%, #f4f7fb 45%, #eef3fa 100%);
+          overflow-x: hidden;
+        }
+
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+
+        a:focus-visible {
+          outline: 3px solid rgba(239, 196, 75, 0.85);
+          outline-offset: 4px;
+        }
+
+        /* ================= HEADER ================= */
+
+        header.w3-container {
+          padding: 0;
+        }
+
+        header.w3-teal {
+          position: relative;
+          overflow: hidden;
+          color: #ffffff !important;
+          background:
+            var(--pattern),
+            linear-gradient(120deg, var(--blue-deep), var(--blue-dark) 42%, var(--blue)) !important;
+          background-repeat: repeat;
+          background-size: 220px 60px, 100% 100%;
+          border: 0;
+          box-shadow: 0 16px 40px rgba(19, 42, 85, 0.18);
+        }
+
+        header.w3-teal::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(circle at 15% 30%, rgba(239, 196, 75, 0.28), transparent 24%),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.1), transparent 55%);
+          pointer-events: none;
+        }
+
+        header.w3-teal::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 4px;
+          background: linear-gradient(90deg, var(--gold), #fff0a3, var(--gold-dark));
+        }
+
+        header .w3-padding {
+          max-width: 1440px;
+          min-height: 80px;
+          margin: 0 auto;
+          padding: 5px 34px !important;
+          display: grid;
+          grid-template-columns: 82px minmax(0, 1fr) auto;
+          grid-template-areas:
+            "logo subtitle version"
+            "logo title version";
+          align-items: center;
+          gap: 4px 20px;
+          position: relative;
+          z-index: 1;
+        }
+
+        header img {
+          grid-area: logo;
+          width: 72px !important;
+          height: 72px;
+          object-fit: contain;
+          /* padding: 7px; */
+          /* background: rgba(255, 255, 255, 0.96); */
+          border-radius: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.65);
+          box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+        }
+
+        header h3,
+        header h2 {
+          margin: 0;
+          text-align: left;
+        }
+
+        header h3:first-of-type {
+          grid-area: subtitle;
+          /* color: rgba(255, 255, 255, 0.78); */
+          font-size: 20px;
+          font-weight: 800;
+          letter-spacing: 0.12em;
+          /* text-transform: uppercase; */
+        }
+
+        header h2 {
+          grid-area: title;
+          color: rgba(255, 255, 255, 0.78);
+          font-size: 15px;
+          /* font-weight: 900; */
+          line-height: 1.05;
+          letter-spacing: -0.05em;
+          margin-top: -22px;
+        }
+
+        header h3:last-of-type {
+          grid-area: version;
+          min-width: 260px;
+          padding: 12px 16px;
+          color: var(--blue-deep);
+          background: rgba(255, 255, 255, 0.96);
+          border-radius: 999px;
+          border: 1px solid rgba(239, 196, 75, 0.5);
+          box-shadow: 0 12px 26px rgba(0, 0, 0, 0.13);
+          font-size: 12px;
+          font-weight: 900;
+          text-align: center;
+          white-space: nowrap;
+        }
+
+        /* ================= MAIN LAYOUT ================= */
+
+        /* .background-image {
+          background-image: url('./bg-image.png');
+            background-position: left center;
+            background-repeat: no-repeat;
+            justify-content: center;
+        } */
+
+        body > .w3-container.w3-padding-16 {
+          width: 100%;
+          min-height: calc(100vh - 160px);
+          padding: 24px 32px 34px !important;
+
+          display: grid;
+          grid-template-columns: 300px minmax(0, 1fr);
+          gap: 24px;
+          align-items: start;
+
+          background-image: url("https://github.com/devkol2023/svg-uid-static-images/blob/main/bg-image.png?raw=true");
+          /* background-size: cover;
+          background-position: center center; */
+          background-repeat: no-repeat;
+
+          box-shadow: none !important;
+          border: 0 !important;
+        }
+
+    body > .w3-container.w3-padding-16::before {
+      content: "SVG-UID\A Sandbox";
+      white-space: pre-line;
+
+      grid-column: 1;
+      width: 100%;
+      min-height: 360px;
+      padding: 38px 34px;
+
+      display: block;
+      position: sticky;
+      top: 24px;
+
+      color: #ffffff;
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+
+      background:
+        /* shield + fingerprint icon */
+        url("data:image/svg+xml,%3Csvg width='130' height='130' viewBox='0 0 130 130' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M65 16L104 31V59C104 84 87.5 106 65 115C42.5 106 26 84 26 59V31L65 16Z' stroke='%234fb8ff' stroke-width='5' fill='rgba(15,70,145,0.35)'/%3E%3Cpath d='M48 62C48 52.6 55.6 45 65 45C74.4 45 82 52.6 82 62' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M41 62C41 48.7 51.7 38 65 38C78.3 38 89 48.7 89 62' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M55 62C55 56.5 59.5 52 65 52C70.5 52 75 56.5 75 62V72' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M65 62V82' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M57 88C61 90 69 90 73 86' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M49 78C51 86 57 94 65 96' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M81 78C79 86 73 94 65 96' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E"),
+
+        /* bottom wave pattern */
+        url("data:image/svg+xml,%3Csvg width='420' height='160' viewBox='0 0 420 160' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.34'%3E%3Cpath d='M0 103C60 63 119 145 180 103C241 61 300 144 420 82' stroke='%2349baff' stroke-width='2'/%3E%3Cpath d='M0 119C60 79 119 161 180 119C241 77 300 160 420 98' stroke='%2349baff' stroke-width='2'/%3E%3Cpath d='M0 135C60 95 119 177 180 135C241 93 300 176 420 114' stroke='%2349baff' stroke-width='2'/%3E%3C/g%3E%3Cg fill='%2349baff' opacity='0.35'%3E%3Ccircle cx='20' cy='118' r='2'/%3E%3Ccircle cx='45' cy='122' r='2'/%3E%3Ccircle cx='70' cy='126' r='2'/%3E%3Ccircle cx='95' cy='130' r='2'/%3E%3Ccircle cx='120' cy='134' r='2'/%3E%3Ccircle cx='145' cy='138' r='2'/%3E%3Ccircle cx='170' cy='142' r='2'/%3E%3Ccircle cx='195' cy='138' r='2'/%3E%3Ccircle cx='220' cy='134' r='2'/%3E%3Ccircle cx='245' cy='130' r='2'/%3E%3Ccircle cx='270' cy='126' r='2'/%3E%3Ccircle cx='295' cy='122' r='2'/%3E%3Ccircle cx='320' cy='118' r='2'/%3E%3C/g%3E%3C/svg%3E"),
+
+        radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.10), transparent 28%),
+        radial-gradient(circle at 86% 22%, rgba(45, 125, 225, 0.22), transparent 28%),
+        linear-gradient(160deg, #073474 0%, #0b4592 50%, #06306d 100%);
+
+      background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+      background-size: 116px 116px, 100% 150px, 100% 100%, 100% 100%, 100% 100%;
+      background-position: center 145px, bottom center, center, center, center;
+
+      border-radius: 20px;
+      box-shadow: 0 18px 40px rgba(19, 42, 85, 0.22);
+      overflow: hidden;
+    }
+
+    body > .w3-container.w3-padding-16::after {
+      /* content: "Unified platform for managing identity services, infrastructure, applications and APIs across the SVG-UID ecosystem."; */
+
+      grid-column: 1;
+      align-self: start;
+
+      position: sticky;
+      top: 270px;
+      z-index: 2;
+
+      width: calc(100% - 68px);
+      margin-left: 34px;
+      margin-top: -172px;
+
+      color: rgba(255, 255, 255, 0.92);
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.55;
+      letter-spacing: -0.01em;
+
+      pointer-events: none;
+    }
+        /* this wraps actual rows visually in right area */
+        .w3-row-padding {
+          grid-column: 2;
+          width: 100%;
+          display: grid !important;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 20px;
+          margin: 0 0 20px !important;
+          padding: 0 !important;
+        }
+
+        .w3-row-padding::before,
+        .w3-row-padding::after {
+          display: none !important;
+        }
+
+        .w3-row-padding > .w3-col {
+          width: auto !important;
+          float: none !important;
+          padding: 0 !important;
+        }
+
+        .w3-row-padding > .w3-col:first-child,
+        .w3-row-padding > .w3-col:last-child,
+        .w3-col > p:empty {
+          display: none !important;
+        }
+
+        /* ================= SERVICE LINKS ================= */
+
+        .w3-col a {
+          min-height: 150px;
+          padding: 18px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 16px;
+          position: relative;
+          overflow: hidden;
+          color: var(--text);
+          background: rgba(255, 255, 255, 0.86);
+          border: 1px solid rgba(220, 229, 243, 0.95);
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow-sm);
+          backdrop-filter: blur(16px);
+          transition:
+            transform 0.22s ease,
+            box-shadow 0.22s ease,
+            border-color 0.22s ease,
+            background 0.22s ease;
+        }
+
+        .w3-col a::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(circle at top left, rgba(45, 85, 162, 0.12), transparent 34%),
+            radial-gradient(circle at bottom right, rgba(239, 196, 75, 0.16), transparent 36%);
+          opacity: 0;
+          transition: opacity 0.22s ease;
+          pointer-events: none;
+        }
+
+        .w3-col a:hover {
+          /* transform: translateY(-6px); */
+          background: #ffffff;
+          border-color: rgba(45, 85, 162, 0.32);
+          box-shadow: var(--shadow-lg);
+        }
+
+        .w3-col a:hover::before {
+          opacity: 1;
+        }
+
+        .w3-col img {
+          width: auto;
+          max-width: 100%;
+          height: 72px !important;
+          max-height: 72px;
+          object-fit: contain;
+          align-self: center;
+          position: relative;
+          z-index: 1;
+          filter: drop-shadow(0 8px 15px rgba(19, 42, 85, 0.12));
+        }
+
+        .w3-col a p {
+          margin: 0;
+          width: 100%;
+          position: relative;
+          z-index: 1;
+          color: var(--blue-deep);
+          font-size: 15px;
+          font-weight: 900;
+          line-height: 1.25;
+          text-align: left;
+          overflow-wrap: anywhere;
+        }
+
+        .w3-col a p::after {
+          /* content: "Open"; */
+          float: right;
+          padding: 5px 9px;
+          color: var(--blue);
+          background: var(--blue-soft);
+          border: 1px solid rgba(45, 85, 162, 0.12);
+          border-radius: 999px;
+          font-size: 11px;
+          font-weight: 900;
+          line-height: 1;
+        }
+
+        /* Featured first row slightly bigger */
+        .w3-row-padding:nth-of-type(1) .w3-col a {
+          min-height: 170px;
+          background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(246, 249, 255, 0.88));
+        }
+
+        .w3-row-padding:nth-of-type(1) .w3-col img {
+          height: 82px !important;
+          max-height: 82px;
+        }
+
+        /* Text-only quick links should NOT look like big cards */
+        .w3-col a:not(:has(img)) {
+          min-height: 44px;
+          padding: 12px 14px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          color: var(--blue-deep);
+          background: #ffffff;
+          border: 1px solid rgba(45, 85, 162, 0.14);
+          border-radius: 999px;
+          box-shadow: none;
+        }
+
+        .w3-col a:not(:has(img)) + a {
+          margin-top: 10px;
+        }
+
+        .w3-col a:not(:has(img)):hover {
+          /* transform: translateX(4px); */
+          border-color: rgba(45, 85, 162, 0.34);
+          box-shadow: 0 8px 18px rgba(19, 42, 85, 0.08);
+        }
+
+        .w3-col a:not(:has(img)) p {
+          font-size: 13px;
+          text-align: left;
+        }
+
+        .w3-col a:not(:has(img)) p::after {
+          content: "↗";
+          padding: 0;
+          color: var(--gold-dark);
+          background: transparent;
+          border: 0;
+          font-size: 15px;
+        }
+
+        /* Make the quick-link group look like a section */
+        .w3-row-padding:nth-of-type(3) .w3-col:nth-child(3) {
+          /* padding: 16px !important; */
+          background: rgba(255, 255, 255, 0.7);
+          border: 1px solid rgba(220, 229, 243, 0.95);
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow-sm);
+        }
+
+        .w3-row-padding:nth-of-type(3) .w3-col:nth-child(3)::before {
+          /* content: "API Shortcuts"; */
+          display: block;
+          margin: 0 0 12px;
+          color: var(--blue-deep);
+          font-size: 13px;
+          font-weight: 900;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        /* ================= ENVIRONMENT PANEL ================= */
+
+        .w3-row-padding:last-of-type {
+          grid-column: 2;
+          grid-template-columns: 1fr !important;
+          margin-top: 6px !important;
+        }
+
+        .w3-row-padding:last-of-type .w3-col {
+          display: block !important;
+        }
+
+        .w3-row-padding:last-of-type .w3-col:first-child,
+        .w3-row-padding:last-of-type .w3-col:last-child {
+          display: none !important;
+        }
+
+        .w3-panel.w3-khaki {
+          width: 100%;
+          margin: 0 !important;
+          padding: 0 !important;
+          overflow: hidden;
+          color: var(--text) !important;
+          background: rgba(255, 255, 255, 0.92) !important;
+          border: 1px solid rgba(220, 229, 243, 0.95);
+          border-radius: var(--radius-lg) !important;
+          box-shadow: var(--shadow-sm);
+        }
+
+        .w3-panel.w3-khaki::before {
+          content: "Environment Details";
+          display: block;
+          padding: 16px 18px;
+          color: var(--blue-deep);
+          background: linear-gradient(180deg, #ffffff, #f6f9ff);
+          border-bottom: 1px solid rgba(220, 229, 243, 0.95);
+          font-size: 14px;
+          font-weight: 900;
+        }
+
+        .w3-table {
+          width: 100%;
+        }
+
+        .w3-table td {
+          padding: 15px 18px !important;
+          vertical-align: middle;
+          color: var(--text);
+          border-bottom: 1px solid rgba(220, 229, 243, 0.8);
+          font-size: 14px;
+          font-weight: 700;
+        }
+
+        .w3-table tr:last-child td {
+          border-bottom: 0;
+        }
+
+        .w3-table td:first-child {
+          width: 28%;
+          color: var(--blue-deep);
+          font-weight: 900;
+        }
+
+        .w3-table img {
+          width: auto;
+          height: 32px !important;
+          object-fit: contain;
+        }
+
+        .w3-monospace {
+          display: inline-block;
+          max-width: 100%;
+          padding: 8px 11px;
+          color: #344054;
+          background: #f8fbff;
+          border: 1px solid rgba(45, 85, 162, 0.14);
+          border-radius: 10px;
+          font-family: Consolas, "Courier New", monospace;
+          font-size: 13px;
+          font-weight: 800;
+          line-height: 1.35;
+          word-break: break-word;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer.w3-container {
+          padding: 0;
+        }
+
+        footer.w3-teal {
+          position: fixed;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          z-index: 1200;
+          color: #ffffff !important;
+          background:
+            var(--pattern),
+            linear-gradient(120deg, var(--blue-deep), var(--blue-dark), var(--blue)) !important;
+          background-repeat: repeat;
+          background-size: 220px 60px, 100% 100%;
+          border-top: 3px solid var(--gold);
+          box-shadow: 0 -12px 30px rgba(19, 42, 85, 0.18);
+        }
+
+        footer .w3-padding {
+          min-height: 35px;
+          max-width: 1440px;
+          margin: 0 auto;
+          padding: 8px 24px !important;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 14px;
+          flex-wrap: wrap;
+          color: #ffffff;
+          font-size: 12px;
+          font-weight: 800;
+        }
+
+        footer .w3-padding::before {
+          color: #ffffff;
+          font-size: 13px;
+          font-weight: 900;
+          letter-spacing: 0.02em;
+        }
+
+        footer a {
+          min-height: 32px;
+          padding: 7px 13px;
+          display: inline-flex;
+          align-items: center;
+          color: #ffffff;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.28);
+          border-radius: 999px;
+          font-size: 12px;
+          font-weight: 900;
+          text-decoration: none;
+        }
+
+        footer a:hover {
+          color: #ffffff;
+          background: rgba(255, 255, 255, 0.18);
+          border-color: rgba(239, 196, 75, 0.75);
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1200px) {
+          body > .w3-container.w3-padding-16 {
+            grid-template-columns: 250px minmax(0, 1fr);
+          }
+
+          .w3-row-padding {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+
+          header h2 {
+            font-size: 30px;
+          }
+        }
+
+        @media (max-width: 920px) {
+          header .w3-padding {
+            grid-template-columns: 70px minmax(0, 1fr);
+            grid-template-areas:
+              "logo subtitle"
+              "logo title"
+              "version version";
+          }
+
+          header h3:last-of-type {
+            justify-self: start;
+            margin-top: 12px;
+            min-width: 0;
+            width: 100%;
+            white-space: normal;
+          }
+
+          body > .w3-container.w3-padding-16 {
+            width: calc(100% - 32px);
+            grid-template-columns: 1fr;
+          }
+
+          body > .w3-container.w3-padding-16::before,
+          body > .w3-container.w3-padding-16::after {
+            grid-column: 1;
+            position: static;
+            margin: 0;
+          }
+
+          body > .w3-container.w3-padding-16::before {
+            min-height: 170px;
+          }
+
+          body > .w3-container.w3-padding-16::after {
+            margin-top: -110px;
+            padding: 0 26px 30px;
+          }
+
+          .w3-row-padding,
+          .w3-row-padding:last-of-type {
+            grid-column: 1;
+          }
+        }
+
+        @media (max-width: 680px) {
+          body {
+            padding-bottom: 84px;
+          }
+
+          header .w3-padding {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+              "logo"
+              "subtitle"
+              "title"
+              "version";
+            justify-items: center;
+            text-align: center;
+            padding: 18px 16px !important;
+          }
+
+          header h2,
+          header h3 {
+            text-align: center;
+          }
+
+          header h2 {
+            font-size: 27px;
+          }
+
+          .w3-row-padding {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+          }
+
+          .w3-col a {
+            min-height: 148px;
+            padding: 15px;
+          }
+
+          .w3-col img {
+            height: 66px !important;
+            max-height: 66px;
+          }
+
+          .w3-table td {
+            display: block;
+            width: 100% !important;
+            padding: 10px 14px !important;
+            border-bottom: 0;
+          }
+
+          .w3-table tr {
+            display: block;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(220, 229, 243, 0.8);
+          }
+
+          .w3-table tr:last-child {
+            border-bottom: 0;
+          }
+        }
+
+        @media (max-width: 460px) {
+          body > .w3-container.w3-padding-16 {
+            width: calc(100% - 20px);
+            margin-top: 16px;
+          }
+
+          .w3-row-padding {
+            grid-template-columns: 1fr;
+          }
+
+          .w3-col a {
+            min-height: 132px;
+          }
+
+          .w3-col img {
+            height: 62px !important;
+          }
+        }
+        /* Screenshot-matched SVG-UID portal layout */
+        body {
+          min-height: 100vh !important;
+          padding-bottom: 14px !important;
+          background:
+            radial-gradient(circle at 0 18%, rgba(45, 85, 162, 0.08), transparent 20%),
+            radial-gradient(circle at 100% 20%, rgba(45, 85, 162, 0.12), transparent 24%),
+            linear-gradient(135deg, #fffaf1 0%, #f8fbff 38%, #edf5ff 100%) !important;
+        }
+
+        body::before {
+          background:
+            radial-gradient(circle at 0 58%, transparent 0 36px, rgba(45, 85, 162, 0.12) 37px 39px, transparent 40px 56px),
+            radial-gradient(circle at 98% 22%, rgba(45, 85, 162, 0.16) 0 15px, transparent 16px),
+            radial-gradient(circle at 96% 30%, rgba(45, 85, 162, 0.18) 0 22px, transparent 23px),
+            linear-gradient(115deg, rgba(45, 85, 162, 0.035) 0 1px, transparent 1px 34px) !important;
+          opacity: 1 !important;
+        }
+
+        body::after {
+          width: 520px !important;
+          height: 520px !important;
+          right: -210px !important;
+          bottom: -120px !important;
+          opacity: 0.5 !important;
+          background:
+            repeating-radial-gradient(circle, rgba(45, 85, 162, 0.12) 0 2px, transparent 2px 14px) !important;
+        }
+
+        /* header.w3-teal {
+          display: none !important;
+        } */
+
+        body > .w3-container.w3-padding-16.background-image {
+          /* width: min(1450px, calc(100% - 40px)) !important; */
+          min-height: calc(100vh - 34px) !important;
+          /* margin: 14px auto 20px !important; */
+          /* padding: 0 !important; */
+          display: grid !important;
+          grid-template-columns: 285px repeat(4, minmax(170px, 1fr)) !important;
+          /* grid-auto-rows: minmax(130px, auto) !important; */
+          gap: 16px !important;
+          align-items: stretch !important;
+          position: relative !important;
+          /* background: transparent !important; */
+          border: 0 !important;
+          border-radius: 0 !important;
+          box-shadow: none !important;
+          backdrop-filter: none !important;
+        }
+
+        body > .w3-container.w3-padding-16.background-image::before {
+          display: none !important;
+        }
+
+        .portal-hero {
+          grid-column: 1;
+          grid-row: 1 / span 4;
+          min-height: 492px;
+          padding: 42px 28px 28px;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          overflow: hidden;
+          color: #ffffff;
+      background:
+        /* shield + fingerprint icon */
+        url("data:image/svg+xml,%3Csvg width='130' height='130' viewBox='0 0 130 130' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M65 16L104 31V59C104 84 87.5 106 65 115C42.5 106 26 84 26 59V31L65 16Z' stroke='%234fb8ff' stroke-width='5' fill='rgba(15,70,145,0.35)'/%3E%3Cpath d='M48 62C48 52.6 55.6 45 65 45C74.4 45 82 52.6 82 62' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M41 62C41 48.7 51.7 38 65 38C78.3 38 89 48.7 89 62' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M55 62C55 56.5 59.5 52 65 52C70.5 52 75 56.5 75 62V72' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M65 62V82' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M57 88C61 90 69 90 73 86' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M49 78C51 86 57 94 65 96' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M81 78C79 86 73 94 65 96' stroke='%23efc44b' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E"),
+
+        /* bottom wave pattern */
+        url("data:image/svg+xml,%3Csvg width='420' height='160' viewBox='0 0 420 160' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.34'%3E%3Cpath d='M0 103C60 63 119 145 180 103C241 61 300 144 420 82' stroke='%2349baff' stroke-width='2'/%3E%3Cpath d='M0 119C60 79 119 161 180 119C241 77 300 160 420 98' stroke='%2349baff' stroke-width='2'/%3E%3Cpath d='M0 135C60 95 119 177 180 135C241 93 300 176 420 114' stroke='%2349baff' stroke-width='2'/%3E%3C/g%3E%3Cg fill='%2349baff' opacity='0.35'%3E%3Ccircle cx='20' cy='118' r='2'/%3E%3Ccircle cx='45' cy='122' r='2'/%3E%3Ccircle cx='70' cy='126' r='2'/%3E%3Ccircle cx='95' cy='130' r='2'/%3E%3Ccircle cx='120' cy='134' r='2'/%3E%3Ccircle cx='145' cy='138' r='2'/%3E%3Ccircle cx='170' cy='142' r='2'/%3E%3Ccircle cx='195' cy='138' r='2'/%3E%3Ccircle cx='220' cy='134' r='2'/%3E%3Ccircle cx='245' cy='130' r='2'/%3E%3Ccircle cx='270' cy='126' r='2'/%3E%3Ccircle cx='295' cy='122' r='2'/%3E%3Ccircle cx='320' cy='118' r='2'/%3E%3C/g%3E%3C/svg%3E"),
+
+        radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.10), transparent 28%),
+        radial-gradient(circle at 86% 22%, rgba(45, 125, 225, 0.22), transparent 28%),
+        linear-gradient(160deg, #073474 0%, #0b4592 50%, #06306d 100%);
+
+      background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+      background-size: 116px 116px, 100% 150px, 100% 100%, 100% 100%, 100% 100%;
+      background-position: center 145px, bottom center, center, center, center;
+
+      border-radius: 20px;
+      box-shadow: 0 18px 40px rgba(19, 42, 85, 0.22);
+      overflow: hidden;
+        }
+
+        .portal-hero::before {
+          content: "";
+          position: absolute;
+          inset: auto -50px -95px -50px;
+          height: 260px;
+          background:
+            repeating-radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.18) 0 2px, transparent 2px 13px),
+            radial-gradient(circle at 50% 30%, rgba(239, 196, 75, 0.16), transparent 40%);
+          opacity: 0.72;
+        }
+
+        .portal-hero::after {
+          content: "";
+          /* position: absolute; */
+          left: 38px;
+          top: 155px;
+          /* width: 116px; */
+          height: 116px;
+          /* background:
+            linear-gradient(135deg, rgba(125, 181, 255, 0.45), rgba(31, 91, 181, 0.1));
+          clip-path: polygon(50% 0, 90% 22%, 90% 72%, 50% 100%, 10% 72%, 10% 22%);
+          border: 4px solid rgba(124, 190, 255, 0.68);
+          filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.18)); */
+        }
+
+        .portal-hero__title {
+          position: relative;
+          z-index: 1;
+          margin-bottom: 28px;
+          color: #ffffff;
+          font-size: 31px;
+          font-weight: 900;
+          line-height: 1.08;
+        }
+
+        .portal-hero__title::after {
+          content: "";
+          display: block;
+          width: 58px;
+          height: 5px;
+          margin-top: 12px;
+          border-radius: 999px;
+          background: var(--svg-gold);
+        }
+
+        .portal-hero__mark {
+          position: relative;
+          z-index: 1;
+          width: 76px;
+          height: 76px;
+          margin: 28px auto 34px;
+          border-radius: 50%;
+          /* background:
+            repeating-radial-gradient(circle, transparent 0 6px, rgba(239, 196, 75, 0.92) 7px 9px, transparent 10px 14px); */
+          opacity: 0.9;
+        }
+
+        .portal-hero p {
+          position: relative;
+          z-index: 1;
+          margin: auto 0 0;
+          color: rgba(255, 255, 255, 0.86);
+          font-size: 12px;
+          font-weight: 700;
+          line-height: 1.45;
+        }
+
+        .w3-row-padding {
+          display: contents !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+
+        .w3-row-padding > .w3-col {
+          width: auto !important;
+          float: none !important;
+          padding: 0 !important;
+        }
+
+        .w3-row-padding > .w3-col:first-child,
+        .w3-row-padding > .w3-col:last-child,
+        .w3-col > p:empty {
+          display: none !important;
+        }
+
+        .w3-col a {
+          min-height: 145px !important;
+          padding: 14px 18px 14px !important;
+          display: grid !important;
+          grid-template-columns: 1fr auto !important;
+          grid-template-rows: minmax(84px, 1fr) auto !important;
+          align-items: end !important;
+          gap: 6px 10px !important;
+          position: relative !important;
+          overflow: hidden !important;
+          color: #0f2d56 !important;
+          background:
+            radial-gradient(circle at 15% 0%, rgba(239, 196, 75, 0.08), transparent 34%),
+            linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 255, 0.94)) !important;
+          border: 1px solid rgba(45, 85, 162, 0.12) !important;
+          border-radius: 18px !important;
+          box-shadow: 0 14px 28px rgba(36, 61, 103, 0.11) !important;
+          transform: none !important;
+          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease !important;
+        }
+
+        .w3-col a:hover {
+          transform: translateY(-3px) scale(1.035) !important;
+          border-color: rgba(45, 85, 162, 0.22) !important;
+          box-shadow: 0 18px 36px rgba(36, 61, 103, 0.16) !important;
+        }
+
+        .w3-col a::before,
+        .w3-col a::after {
+          display: none !important;
+        }
+
+        .w3-col a[href]::after {
+          content: "Open  >" !important;
+          grid-column: 2 !important;
+          grid-row: 2 !important;
+          min-width: 52px !important;
+          height: 24px !important;
+          padding: 0 10px !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          color: #1f57ad !important;
+          font-size: 10px !important;
+          font-weight: 900 !important;
+          line-height: 1 !important;
+          background: #eef4ff !important;
+          border: 1px solid rgba(65, 114, 210, 0.18) !important;
+          border-radius: 999px !important;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86) !important;
+        }
+
+        .w3-col img {
+          grid-column: 1 / -1 !important;
+          grid-row: 1 !important;
+          width: auto !important;
+          max-width: 94% !important;
+          height: 82px !important;
+          max-height: 82px !important;
+          margin: 0 auto !important;
+          padding: 0 !important;
+          object-fit: contain !important;
+          background: transparent !important;
+          border: 0 !important;
+          border-radius: 0 !important;
+          box-shadow: none !important;
+          filter: drop-shadow(0 8px 12px rgba(36, 61, 103, 0.12)) !important;
+          transform: none !important;
+          transition: transform 0.18s ease, filter 0.18s ease !important;
+        }
+
+        .w3-col a:hover img {
+          transform: translateY(-2px) scale(1.06) !important;
+          filter: drop-shadow(0 12px 18px rgba(36, 61, 103, 0.18)) !important;
+        }
+
+        .w3-col a p {
+          grid-column: 1 !important;
+          grid-row: 2 !important;
+          width: auto !important;
+          min-height: auto !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          justify-self: start !important;
+          color: #122d55 !important;
+          background: transparent !important;
+          border: 0 !important;
+          font-size: 13px !important;
+          font-weight: 900 !important;
+          line-height: 1.2 !important;
+          text-align: left !important;
+          letter-spacing: 0 !important;
+          text-shadow: none !important;
+        }
+
+        .w3-col:has(a[href*=".well-known"]) {
+          padding: 14px 16px !important;
+          display: flex !important;
+          flex-direction: column !important;
+          justify-content: center !important;
+          gap: 7px !important;
+          background:
+            radial-gradient(circle at 18% 0%, rgba(239, 196, 75, 0.1), transparent 35%),
+            linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 255, 0.94)) !important;
+          border: 1px solid rgba(45, 85, 162, 0.12) !important;
+          border-radius: 18px !important;
+          box-shadow: 0 14px 28px rgba(36, 61, 103, 0.11) !important;
+        }
+
+        .w3-col:has(a[href*=".well-known"])::before {
+          content: "API SHORTCUTS" !important;
+          display: block !important;
+          margin: 0 0 2px !important;
+          color: #122d55 !important;
+          font-size: 12px !important;
+          font-weight: 900 !important;
+          text-align: center !important;
+          letter-spacing: 0 !important;
+        }
+
+        .w3-col:has(a[href*=".well-known"]) a {
+          min-height: 28px !important;
+          width: 100% !important;
+          margin: 0 !important;
+          padding: 0 11px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          color: #122d55 !important;
+          background: rgba(255, 255, 255, 0.8) !important;
+          border: 1px solid rgba(45, 85, 162, 0.12) !important;
+          border-radius: 999px !important;
+          box-shadow: 0 4px 10px rgba(36, 61, 103, 0.06) !important;
+        }
+
+        .w3-col:has(a[href*=".well-known"]) a::after {
+          content: ">" !important;
+          min-width: 0 !important;
+          height: auto !important;
+          padding: 0 !important;
+          display: inline !important;
+          color: var(--svg-gold-dark) !important;
+          font-size: 16px !important;
+          background: transparent !important;
+          border: 0 !important;
+          box-shadow: none !important;
+        }
+
+        .w3-col:has(a[href*=".well-known"]) a p {
+          font-size: 12px !important;
+        }
+
+        .w3-row-padding:last-of-type {
+          grid-column: 1 / -1 !important;
+          display: block !important;
+          margin-top: 2px !important;
+        }
+
+        .w3-panel.w3-khaki {
+          margin: 0 20px !important;
+          padding: 0 !important;
+          display: grid !important;
+          grid-template-columns: 190px 1fr !important;
+          align-items: stretch !important;
+          overflow: hidden !important;
+          background:
+            linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 255, 0.96)) !important;
+          border: 1px solid rgba(45, 85, 162, 0.12) !important;
+          border-radius: 22px !important;
+          box-shadow: 0 16px 34px rgba(36, 61, 103, 0.12) !important;
+        }
+
+        .w3-panel.w3-khaki::before {
+          content: "Environment Details" !important;
+          width: auto !important;
+          min-height: 86px !important;
+          padding: 0 20px 0 70px !important;
+          display: flex !important;
+          align-items: center !important;
+          color: #122d55 !important;
+          font-size: 15px !important;
+          font-weight: 900 !important;
+          line-height: 1.2 !important;
+          background:
+            radial-gradient(circle at 40px 50%, #e8f1ff 0 24px, transparent 25px) !important;
+          border-bottom: 0 !important;
+        }
+
+        .w3-panel.w3-khaki .w3-table {
+          display: grid !important;
+          grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          align-items: center !important;
+          min-height: 86px !important;
+        }
+
+        .w3-panel.w3-khaki::before,
+        .w3-panel.w3-khaki .w3-table {
+          float: none !important;
+        }
+
+        .w3-panel.w3-khaki tr {
+          display: contents !important;
+        }
+
+        .w3-panel.w3-khaki td {
+          min-height: 86px !important;
+          padding: 15px 26px !important;
+          display: flex !important;
+          align-items: center !important;
+          color: #122d55 !important;
+          border-bottom: 0 !important;
+          border-left: 2px solid rgba(239, 196, 75, 0.58) !important;
+          font-size: 13px !important;
+          font-weight: 900 !important;
+        }
+
+        .w3-panel.w3-khaki td:first-child {
+          display: none !important;
+        }
+
+        .w3-panel.w3-khaki .w3-monospace {
+          padding: 0 !important;
+          color: #263954 !important;
+          background: transparent !important;
+          border: 0 !important;
+          font-size: 11px !important;
+          font-weight: 800 !important;
+          word-break: break-word !important;
+        }
+
+        .w3-panel.w3-khaki td::before {
+          min-width: 34px !important;
+          height: 34px !important;
+          margin-right: 12px !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          color: var(--svg-blue) !important;
+          font-size: 11px !important;
+          font-weight: 900 !important;
+          line-height: 1 !important;
+          background: #eef4ff !important;
+          border: 1px solid rgba(45, 85, 162, 0.14) !important;
+          border-radius: 50% !important;
+        }
+
+        .w3-panel.w3-khaki tr:nth-child(1) td:nth-child(2)::before,
+        .w3-panel.w3-khaki tr:nth-child(2) td:nth-child(2)::before {
+          content: "API" !important;
+        }
+
+        .w3-panel.w3-khaki tr:nth-child(3) td:nth-child(2)::before {
+          content: "DB" !important;
+        }
+
+        footer.w3-teal {
+          height: 40px !important;
+          min-height: 40px !important;
+          overflow: hidden !important;
+          /* border-top: 3px solid var(--svg-gold) !important; */
+          box-shadow: none !important;
+        }
+
+        footer .w3-padding {
+          /* display: none !important; */
+        }
+
+        @media (max-width: 1180px) {
+          body > .w3-container.w3-padding-16.background-image {
+            grid-template-columns: 210px repeat(3, minmax(170px, 1fr)) !important;
+          }
+        }
+
+        @media (max-width: 860px) {
+          body > .w3-container.w3-padding-16.background-image {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+
+          .portal-hero {
+            grid-column: 1 / -1 !important;
+            grid-row: auto !important;
+            min-height: 260px !important;
+          }
+
+          .w3-panel.w3-khaki {
+            margin: 0 !important;
+          }
+        }
+
+        @media (max-width: 560px) {
+          body > .w3-container.w3-padding-16.background-image {
+            width: calc(100% - 24px) !important;
+            grid-template-columns: 1fr !important;
+          }
+
+          .w3-panel.w3-khaki .w3-table,
+          .w3-panel.w3-khaki::before {
+            display: block !important;
+            float: none !important;
+            width: 100% !important;
+          }
+
+          .w3-panel.w3-khaki td {
+            min-height: auto !important;
+            border-left: 0 !important;
+            border-top: 1px solid rgba(45, 85, 162, 0.12) !important;
+          }
+        }
+
+        .environment-bar.w3-panel.w3-khaki {
+          margin: 0 20px !important;
+          padding: 14px 18px !important;
+          min-height: 86px !important;
+          display: grid !important;
+          grid-template-columns: 190px repeat(3, minmax(220px, 1fr)) !important;
+          align-items: center !important;
+          gap: 0 !important;
+          background:
+            linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 255, 0.96)) !important;
+          border: 1px solid rgba(45, 85, 162, 0.12) !important;
+          border-radius: 22px !important;
+          box-shadow: 0 16px 34px rgba(36, 61, 103, 0.12) !important;
+        }
+
+        .environment-bar.w3-panel.w3-khaki::before {
+          display: none !important;
+        }
+
+        .environment-title,
+        .environment-item {
+          min-height: 58px;
+          display: flex;
+          align-items: center;
+          min-width: 0;
+        }
+
+        .environment-title {
+          gap: 13px;
+          padding-right: 20px;
+          color: #122d55;
+          font-size: 16px;
+          font-weight: 900;
+          line-height: 1.15;
+        }
+
+        .environment-item {
+          gap: 12px;
+          padding: 0 18px;
+          border-left: 2px solid rgba(239, 196, 75, 0.58);
+        }
+
+        .environment-icon,
+        .environment-logo {
+          width: 40px;
+          height: 40px;
+          flex: 0 0 40px;
+        }
+
+        .environment-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--svg-blue);
+          font-size: 11px;
+          font-weight: 900;
+          line-height: 1;
+          background: #eaf2ff;
+          border: 1px solid rgba(45, 85, 162, 0.14);
+          border-radius: 50%;
+          box-shadow: 0 8px 16px rgba(45, 85, 162, 0.1);
+        }
+
+        .environment-logo {
+          object-fit: contain;
+          padding: 2px;
+        }
+
+        .environment-copy {
+          min-width: 0;
+          flex: 1 1 auto;
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+
+        .environment-copy strong {
+          color: #122d55;
+          font-size: 13px;
+          font-weight: 900;
+          line-height: 1.1;
+        }
+
+        .environment-copy span {
+          max-width: 100%;
+          padding: 6px 10px;
+          display: inline-block;
+          color: #263954;
+          background: #ffffff;
+          border: 1px solid rgba(45, 85, 162, 0.1);
+          border-radius: 10px;
+          box-shadow: 0 5px 12px rgba(36, 61, 103, 0.07);
+          font-size: 11px;
+          font-weight: 800;
+          line-height: 1.2;
+          word-break: break-word;
+          overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 1240px) {
+          .environment-bar.w3-panel.w3-khaki {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 0 !important;
+            padding: 10px 16px !important;
+          }
+
+          .environment-title,
+          .environment-item {
+            min-height: 70px;
+            padding: 12px 18px !important;
+          }
+
+          .environment-item {
+            border-left: 0 !important;
+            border-top: 1px solid rgba(45, 85, 162, 0.1) !important;
+          }
+
+          .environment-title + .environment-item {
+            border-top: 0 !important;
+            border-left: 2px solid rgba(239, 196, 75, 0.58) !important;
+          }
+        }
+
+        @media (max-width: 560px) {
+          .environment-bar.w3-panel.w3-khaki {
+            margin: 0 !important;
+            grid-template-columns: 1fr !important;
+            padding: 10px 14px !important;
+          }
+
+          .environment-title,
+          .environment-item {
+            min-height: auto !important;
+            padding: 12px 4px !important;
+          }
+
+          .environment-title + .environment-item,
+          .environment-item {
+            border-left: 0;
+            border-top: 1px solid rgba(45, 85, 162, 0.1);
+          }
+
+          .environment-title {
+            border-top: 0 !important;
+          }
+
+          .environment-icon,
+          .environment-logo {
+            width: 36px;
+            height: 36px;
+            flex-basis: 36px;
+          }
+        }
+      </style>
+    </head>
+
+    <body>
+
+    <header class="w3-container w3-teal w3-center">
+      <div class="w3-padding">
+        <img src="https://raw.githubusercontent.com/devkol2023/svg-uid-static-images/refs/heads/main/gosvg-logo-2.jpg" width="50px">
+        <h3>SVG-UID Ecosystem</h3>
+        <h2><b>SVG-UID-Sandbox</b></h2>
+        <h3>Version: svg-uid-infra-dev</h3>
+      </div>
+    </header>
+
+    <div class="w3-container w3-padding-16 background-image">
+
+      <div class="portal-hero">
+        <div class="portal-hero__title">SVG-UID<br>Sandbox</div>
+        <div class="portal-hero__mark" aria-hidden="true"></div>
+        <p>Unified platform for managing identity services, infrastructure, applications and APIs across the SVG-UID ecosystem.</p>
+      </div>
+
+      <!-- row 1 -->
+      <div class="w3-row-padding w3-padding-16">
+        <div class="w3-col l2 w3-center"><p></p></div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://activemq.mosip-sandbox.svgdev.net">
+            <img src="https://activemq.apache.org/assets/img/activemq_logo_white_vertical.png" style="height:80px">
+            <p>ActiveMQ</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://kafka.mosip-sandbox.svgdev.net">
+            <img src="http://svn.apache.org/repos/asf/kafka/site/logos/kafka-logo-no-text.png" style="height:80px">
+            <p>Kafka</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://iam.mosip-sandbox.svgdev.net">
+            <img src="https://raw.githubusercontent.com/devkol2023/svg-uid-static-images/refs/heads/main/key-cloak.png" style="height:80px">
+            <p>Keycloak</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://regclient.mosip-sandbox.svgdev.net">
+            <img src="https://raw.githubusercontent.com/mosip/documentation/1.2.0/docs/_images/reg-client-orig.png" style="height:80px">
+            <p>Registration Client</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center"><p></p></div>
+      </div>
+
+      <!-- row 2 -->
+      <div class="w3-row-padding w3-padding-16">
+        <div class="w3-col l2 w3-center"><p></p></div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://kibana.mosip-sandbox.svgdev.net">
+            <img src="https://images.contentstack.io/v3/assets/bltefdd0b53724fa2ce/blt4466841eed0bf232/5d082a5e97f2babb5af907ee/logo-kibana-32-color.svg" style="height:80px">
+            <p>Kibana</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://prereg.mosip-sandbox.svgdev.net/pre-registration-ui/">
+            <img src="https://github.com/devkol2023/svg-uid-static-images/blob/main/pre-reg.png?raw=true" style="height:80px">
+            <p>Pre-registration</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://minio.mosip-sandbox.svgdev.net">
+            <img src="https://github.com/devkol2023/svg-uid-static-images/blob/main/min-io.png?raw=true" style="height:80px">
+            <p>MinIO</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://admin.mosip-sandbox.svgdev.net">
+            <img src="https://github.com/devkol2023/svg-uid-static-images/blob/main/admin.png?raw=true" style="height:80px">
+            <p>Admin</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center"><p></p></div>
+      </div>
+
+      <!-- row 3 -->
+      <div class="w3-row-padding w3-padding-16">
+        <div class="w3-col l2 w3-center"><p></p></div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://pmp.mosip-sandbox.svgdev.net">
+            <img src="https://github.com/devkol2023/svg-uid-static-images/blob/main/pmp.png?raw=true" style="height:80px">
+            <p>PMP</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://api.mosip-sandbox.svgdev.net/.well-known/">
+            <p>.well-known</p>
+          </a>
+          <a href="https://api.mosip-sandbox.svgdev.net/inji/">
+            <p>INJI</p>
+          </a>
+          <a href="https://api.mosip-sandbox.svgdev.net/mosip-certs/">
+            <p>MOSIP Certs</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://compliance.mosip-sandbox.svgdev.net">
+            <img src="https://raw.githubusercontent.com/mosip/documentation/1.2.0/docs/_images/compliance-home-page.png" style="height:80px">
+            <p>Compliance</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://resident.mosip-sandbox.svgdev.net">
+            <img src="https://github.com/devkol2023/svg-uid-static-images/blob/main/resident.png?raw=true" style="height:80px">
+            <p>Resident</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center"><p></p></div>
+      </div>
+
+      <!-- row 4 -->
+      <div class="w3-row-padding w3-padding-16">
+        <div class="w3-col l2 w3-center"><p></p></div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://esignet.mosip-sandbox.svgdev.net">
+            <img src="https://raw.githubusercontent.com/mosip/documentation/1.2.0/docs/_images/esignet-home-page.png" style="height:80px">
+            <p>eSignet</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://">
+            <img src="https://raw.githubusercontent.com/mosip/documentation/1.2.0/docs/_images/healthservices.png" style="height:80px">
+            <p>Health Services</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center">
+          <a href="https://smtp.mosip-sandbox.svgdev.net">
+            <img src="https://raw.githubusercontent.com/mosip/documentation/1.2.0/docs/_images/smtp-home-page.png" style="height:80px">
+            <p>SMTP</p>
+          </a>
+        </div>
+
+        <div class="w3-col l2 w3-center"><p></p></div>
+      </div>
+
+      <!-- row 5 -->
+      <div class="w3-row-padding w3-padding-16">
+        <div class="w3-col l4 w3-center"><p></p></div>
+
+        <div class="w3-col l4 w3-left">
+          <div class="w3-panel w3-khaki w3-round-large environment-bar">
+            <div class="environment-title">
+              <span class="environment-icon">ENV</span>
+              <span>Environment<br>Details</span>
+            </div>
+            <div class="environment-item">
+              <span class="environment-icon">API</span>
+              <span class="environment-copy">
+                <strong>External API</strong>
+                <span>https://api.mosip-sandbox.svgdev.net</span>
+              </span>
+            </div>
+            <div class="environment-item">
+              <span class="environment-icon">API</span>
+              <span class="environment-copy">
+                <strong>Internal API</strong>
+                <span>https://api-internal.mosip-sandbox.svgdev.net</span>
+              </span>
+            </div>
+            <div class="environment-item">
+              <img class="environment-logo" src="https://www.clipartmax.com/png/full/242-2423721_logo-postgresql.png" alt="">
+              <span class="environment-copy">
+                <strong>PostgreSQL</strong>
+                <span>postgres.mosip-sandbox.svgdev.net:5432</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="w3-col l4 w3-center"><p></p></div>
+      </div>
+
+    </div>
+
+    <footer class="w3-container w3-teal w3-center">
+      <div class="w3-padding">
+        © GoSVG - National Identification System
+        <!-- <a href="https://mosip.io">MOSIP Website</a> &nbsp;&nbsp;&nbsp;
+        <a href="https://docs.mosip.io">MOSIP Docs</a> -->
+      </div>
+    </footer>
+
+    </body>
+    </html>
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: landing-page
+    meta.helm.sh/release-namespace: landing-page
+  creationTimestamp: "2026-05-18T06:14:03Z"
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: landing-page
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: landing-page
+    helm.sh/chart: landing-page-12.0.1
+  name: landing-page-index
+  namespace: landing-page
+  resourceVersion: "33304901"
+  uid: b2ffb2de-dcbc-48b6-8878-605ba856c251
+APWRD-Server-VM01@APWRD-Server-VM:~/svg/landing-page$
