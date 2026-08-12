@@ -1,0 +1,140 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    meta.helm.sh/release-name: mock-identity-system
+    meta.helm.sh/release-namespace: esignet
+  creationTimestamp: "2026-05-21T13:00:19Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: mock-identity-system
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mock-identity-system
+    helm.sh/chart: mock-identity-system-0.9.3
+  name: mock-identity-system
+  namespace: esignet
+  resourceVersion: "42896539"
+  uid: 8ead48f5-d58d-42ce-93ad-39b400a3d6d1
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: mock-identity-system
+      app.kubernetes.io/name: mock-identity-system
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: mock-identity-system
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: mock-identity-system
+        helm.sh/chart: mock-identity-system-0.9.3
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: mock-identity-system
+                  app.kubernetes.io/name: mock-identity-system
+              namespaces:
+              - esignet
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms1500M -Xmx1500M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        - configMapRef:
+            name: softhsm-mock-identity-system-share
+        image: docker.io/mosipid/mock-identity-system:0.9.3
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/mock-identity-system/actuator/health
+            port: 8082
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: mock-identity-system
+        ports:
+        - containerPort: 8082
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /v1/mock-identity-system/actuator/health
+            port: 8082
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 2250Mi
+          requests:
+            cpu: 100m
+            memory: 1500Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /v1/mock-identity-system/actuator/health
+            port: 8082
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: mock-identity-system
+      serviceAccountName: mock-identity-system
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-05-21T15:40:49Z"
+    lastUpdateTime: "2026-05-21T15:40:49Z"
+    message: ReplicaSet "mock-identity-system-59cc95fbd6" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-06-19T17:51:41Z"
+    lastUpdateTime: "2026-06-19T17:51:41Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
