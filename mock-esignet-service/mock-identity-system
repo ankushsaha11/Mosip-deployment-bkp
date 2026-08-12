@@ -138,3 +138,10 @@ status:
   readyReplicas: 1
   replicas: 1
   updatedReplicas: 1
+
+
+
+
+
+
+Dockerfile : FROM eclipse-temurin:11-jdk
