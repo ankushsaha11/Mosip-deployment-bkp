@@ -47,3 +47,8 @@ Pod Template:
   Tolerations:  <none>
 
 APWRD-Server-VM01@APWRD-Server-VM:~/svg$
+
+
+
+To Build :  ng build "--base-href" "." "--output-path=dist"
+----------
