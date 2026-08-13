@@ -1,0 +1,28 @@
+Step 1: Save your new HTML content to a local file
+
+nano index.html
+# paste your new HTML content, save & exit
+
+
+
+
+
+
+Step 2: Generate & apply the updated ConfigMap
+
+
+kubectl create configmap landing-page-index \
+  -n landing-page \
+  --from-file=index.html=./index.html \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+
+
+
+
+Step 3: Restart the pod to pick up the change (if not auto-reloaded)
+
+
+kubectl rollout restart deployment landing-page -n landing-page
+
+
