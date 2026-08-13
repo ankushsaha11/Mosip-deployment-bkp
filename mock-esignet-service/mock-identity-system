@@ -145,3 +145,7 @@ status:
 
 
 Dockerfile : FROM eclipse-temurin:11-jdk
+
+
+To build the package jar file : mvn clean package -Dmaven.javadoc.skip=true -DskipTests
+-------------------------------
