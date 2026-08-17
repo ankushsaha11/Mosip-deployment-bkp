@@ -199,5 +199,11 @@ spec:
               number: 80
 
 
+
+pom.xml : Added build section between </dependencies> and </project>
+---------
+
+
+
 To build : mvn clean package -DskipTests
 ----------
