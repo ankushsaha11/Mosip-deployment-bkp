@@ -200,7 +200,7 @@ spec:
 
 
 
-pom.xml : Added build section between </dependencies> and </project>
+pom.xml : Added build section between </dependencies> and </project> (last portion)
 ---------
 
 
