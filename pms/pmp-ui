@@ -1,0 +1,54 @@
+Previous Image versions :
+
+
+APWRD-Server-VM01@APWRD-Server-VM:~/svg$ kubectl rollout history deployment pmp-ui -n pms --revision=1
+deployment.apps/pmp-ui with revision #1
+Pod Template:
+  Labels:       app.kubernetes.io/instance=pmp-ui
+        app.kubernetes.io/managed-by=Helm
+        app.kubernetes.io/name=pmp-ui
+        helm.sh/chart=pmp-ui-12.0.2
+        pod-template-hash=55848d495d
+  Service Account:      pmp-ui-foo
+  Containers:
+   pmp-ui:
+    Image:      docker.io/mosipid/pmp-ui:1.2.0.2
+    Port:       8080/TCP (spring-service)
+    Host Port:  0/TCP (spring-service)
+    Limits:
+      cpu:      300m
+      memory:   1500Mi
+    Requests:
+      cpu:      100m
+      memory:   50Mi
+    Liveness:   http-get http://:8080/ delay=20s timeout=5s period=10s #success=1 #failure=6
+    Readiness:  http-get http://:8080/ delay=0s timeout=5s period=10s #success=1 #failure=6
+    Startup:    http-get http://:8080/ delay=0s timeout=5s period=10s #success=1 #failure=30
+    Environment Variables from:
+      global    ConfigMap       Optional: false
+      config-server-share       ConfigMap       Optional: false
+      artifactory-share ConfigMap       Optional: false
+    Environment:
+      container_user:   mosip
+      JDK_JAVA_OPTIONS: -Xms750M -Xmx750M
+    Mounts:
+      /etc/nginx/conf.d/default.conf from nginx-config (rw,path="default.conf")
+      /usr/share/nginx/html/assets/config.json from ui-config (rw,path="config.json")
+  Volumes:
+   ui-config:
+    Type:       ConfigMap (a volume populated by a ConfigMap)
+    Name:       pmp-ui
+    Optional:   false
+   nginx-config:
+    Type:       ConfigMap (a volume populated by a ConfigMap)
+    Name:       pmp-ui
+    Optional:   false
+  Node-Selectors:       <none>
+  Tolerations:  <none>
+
+APWRD-Server-VM01@APWRD-Server-VM:~/svg$
+
+
+
+To Build :  ng build "--base-href" "." "--output-path=dist"
+----------
