@@ -148,5 +148,15 @@ Dockerfile : FROM eclipse-temurin:11-jdk
              FROM eclipse-temurin:11-jdk-focal
 
 
+
+
+kubectl patch virtualservice mock-identity-system -n esignet --type merge -p '
+spec:
+  gateways:
+    - istio-system/public
+    - istio-system/internal <---------- (Added this line)
+'
+
+
 To build the package jar file : mvn clean package -Dmaven.javadoc.skip=true -DskipTests
 -------------------------------
