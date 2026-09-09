@@ -28,7 +28,7 @@ kubectl rollout restart deployment landing-page -n landing-page
 
 
 
-Saint-vincent logo not visible issue :
+Note : Saint-vincent logo not visible issue :
 
 
 Need to change <img src = ""> in configmap of landing-page as seen below -
