@@ -26,3 +26,19 @@ Step 3: Restart the pod to pick up the change (if not auto-reloaded)
 kubectl rollout restart deployment landing-page -n landing-page
 
 
+
+
+Saint-vincent logo not visible issue :
+
+
+Need to change <img src = ""> in configmap of landing-page as seen below -
+
+
+    </head>
+    <body>
+      <header class="site-header">
+        <div class="brand">
+          <img src="https://raw.githubusercontent.com/devkol2023/svg-uid-static-images/dev/gosvg-logo-2.jpg" alt="Saint Vincent and the Grenadines crest">
+          <div><h1>Saint Vincent and the Grenadines - UID Ecosystem</h1><p>SVG-UID-Sandbox</p></div>
+        </div>
+      </header>
