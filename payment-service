@@ -1,4 +1,60 @@
 
+
+Dockerfile
+-----------
+
+
+# =========================================================
+# Stage 1: Build  (Java 11 – matches <java.version>11 in pom.xml)
+# =========================================================
+FROM maven:3.9-eclipse-temurin-11 AS build
+
+WORKDIR /build
+
+# Cache dependencies (re-downloaded only when pom.xml changes)
+COPY pom.xml .
+RUN mvn -B -q dependency:go-offline || true
+
+# Build
+COPY src ./src
+RUN mvn -B clean package -DskipTests
+
+# Copy the Spring Boot executable jar (svg-uid-payment-service-1.0.0.jar)
+RUN cp target/svg-uid-payment-service-*.jar /build/app.jar
+
+# =========================================================
+# Stage 2: Runtime  (same Java 11)
+# =========================================================
+FROM eclipse-temurin:11-jre-jammy
+
+# No SPRING_PROFILES_ACTIVE here: falls back to spring.profiles.default=local.
+# Set the profile per environment in the Deployment instead.
+ENV TZ=Asia/Kolkata \
+    JAVA_OPTS="-XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/./urandom"
+
+RUN groupadd -r app && useradd -r -g app -d /app app \
+    && mkdir -p /app /opt/config /opt/logs \
+    && chown -R app:app /app /opt/config /opt/logs
+
+WORKDIR /app
+COPY --from=build --chown=app:app /build/app.jar /app/app.jar
+
+USER app
+
+# server.port=8082 (application-local / application-sandbox)
+EXPOSE 8082
+
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar /app/app.jar"]
+
+
+
+
+
+
+
+
+
+
 1. Deployment manifest
 
 APWRD-Server-VM01@APWRD-Server-VM:~/svg/svg-uid-payment-manifests$ cat payment-service-deployment.yaml
