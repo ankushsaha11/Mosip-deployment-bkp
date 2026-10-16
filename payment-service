@@ -224,3 +224,8 @@ spec:
 
 To build : mvn clean package -DskipTests
 ----------
+
+
+
+Docker build : docker build -t apwrd2/paymentservice:14102026_DEV .
+--------------
