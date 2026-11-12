@@ -45,3 +45,132 @@ Pod Template:
 
 To build : ng build "--base-href" "." "--output-path=dist"
 ----------
+
+
+
+
+
+
+admin-i18n-fix
+===============
+
+
+Step 1: Collect all i18n files from the image
+
+cd ~/admin-i18n-fix
+rm -rf image-i18n merged
+docker create --name adminui-tmp apwrd2/adminui:12112026-1.2.0.1
+docker cp adminui-tmp:/usr/share/nginx/html/assets/i18n ./image-i18n
+docker rm adminui-tmp
+ls -l image-i18n
+
+Checkpoint: image-i18n lists the json files, including eng.json.
+
+
+
+
+Step 2: Merge the bundle and image files
+
+cd ~/admin-i18n-fix
+mkdir -p merged
+
+# Start from the bundle; the image's keys and values override it
+for f in ara default eng fra hin kan tam; do
+  if [ -s image-i18n/$f.json ]; then
+    jq -s '.[0] * .[1]' bundle/$f.json image-i18n/$f.json > merged/$f.json
+  else
+    cp bundle/$f.json merged/$f.json
+  fi
+done
+
+# Other languages: use English text for any key they don't have
+for l in ara fra hin kan tam; do
+  jq -s '.[0] * .[1]' merged/eng.json merged/$l.json > tmp.json && mv tmp.json merged/$l.json
+done
+
+# Keep the empty placeholder files as they are
+cp bundle/null.json bundle/undefined.json merged/
+
+
+
+
+
+Step 4: Validate the merged files
+
+cd ~/admin-i18n-fix
+for f in merged/*.json; do [ -s "$f" ] && { jq empty "$f" && echo "OK $f" || echo "BAD $f"; }; done
+
+jq -r '.menuItems.item9.title, .menuItems.item10.title, .menuItems.item10.subItem1, .menuItems.item11.title, .paginationLabel.showRows' merged/eng.json
+
+diff <(jq -r 'paths(scalars)|map(tostring)|join(".")' merged/eng.json | sort) \
+     <(jq -r 'paths(scalars)|map(tostring)|join(".")' image-eng.json | sort) | grep '^>' | wc -l
+
+
+
+
+Step 5: Build the new zip
+
+cd ~/admin-i18n-fix
+ls -l merged
+command -v python3
+cd ~/admin-i18n-fix/merged
+rm -f ../admin-i18n-bundle.zip
+python3 -m zipfile -c ../admin-i18n-bundle.zip ara.json default.json eng.json fra.json hin.json kan.json null.json tam.json undefined.json
+cd ~/admin-i18n-fix
+unzip -l admin-i18n-bundle.zip
+unzip -p admin-i18n-bundle.zip eng.json | grep -o '"item1[01]"' | sort -u
+ls -l admin-i18n-bundle.zip
+
+
+
+Step 5b: Check keys and values for every file
+
+cd ~/admin-i18n-fix
+for f in ara default eng fra hin kan tam; do
+  dv=$(jq -n --slurpfile m merged/$f.json --slurpfile i image-i18n/$f.json \
+       '[$i[0]|paths(scalars)] | map(. as $p | select(($m[0]|getpath($p)) != ($i[0]|getpath($p)))) | length')
+  echo "$f: differing_values=$dv"
+done
+
+
+
+
+Steps 6–10: Patch Artifactory and restart admin-ui
+
+# ---------- Step 6: Backup + ConfigMap ----------
+cd ~/admin-i18n-fix
+kubectl -n artifactory get deploy artifactory -o yaml > artifactory-deploy.backup.yaml
+ls -l artifactory-deploy.backup.yaml
+kubectl -n artifactory create configmap admin-i18n-bundle \
+  --from-file=admin-i18n-bundle.zip --dry-run=client -o yaml | kubectl apply -f -
+kubectl -n artifactory get configmap admin-i18n-bundle
+
+# ---------- Step 7: Mount into Artifactory ----------
+kubectl -n artifactory patch deploy artifactory --type=json -p='[
+ {"op":"add","path":"/spec/template/spec/volumes","value":[{"name":"admin-i18n-bundle","configMap":{"name":"admin-i18n-bundle"}}]},
+ {"op":"add","path":"/spec/template/spec/containers/0/volumeMounts","value":[{"name":"admin-i18n-bundle","mountPath":"/usr/share/nginx/html/artifactory/libs-release-local/i18n/admin-i18n-bundle.zip","subPath":"admin-i18n-bundle.zip","readOnly":true}]}
+]'
+kubectl -n artifactory rollout status deploy artifactory
+kubectl -n artifactory get pods
+
+# ---------- Step 8: Confirm Artifactory serves the new bundle ----------
+kubectl -n artifactory exec deploy/artifactory -- ls -l /usr/share/nginx/html/artifactory/libs-release-local/i18n/admin-i18n-bundle.zip
+kubectl -n admin exec deploy/admin-ui -- sh -c 'cd /tmp && rm -f c.zip && wget -q $artifactory_url_env/artifactory/libs-release-local/i18n/admin-i18n-bundle.zip -O c.zip && ls -l c.zip && unzip -p c.zip eng.json | grep -o "\"item1[01]\"" | sort -u'
+
+# ---------- Step 9: Restart admin-ui ----------
+kubectl -n admin rollout restart deploy admin-ui
+kubectl -n admin rollout status deploy admin-ui
+
+# ---------- Step 10: Final check ----------
+kubectl -n admin exec deploy/admin-ui -- sh -c 'ls -l $i18n_path/eng.json; grep -o "\"item1[01]\"" $i18n_path/eng.json | sort -u'
+curl -sk https://admin.mosip-sandbox.svgdev.net/assets/i18n/eng.json | grep -o '"item1[01]"' | sort -u
+
+
+
+
+
+
+
+
+
+
