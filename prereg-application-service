@@ -224,7 +224,7 @@ RUN mkdir -p ${loader_path}
 
 ENV loader_path_env=${loader_path}
 
-COPY ./target/pre-registration-application-*.jar pre-registration-application-service.jar
+COPY ./target/pre-registration-application-service-1.3.0.jar pre-registration-application-service.jar
 
 # change permissions of file inside working dir
 RUN chown -R ${container_user}:${container_user} /home/${container_user}
