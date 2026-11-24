@@ -150,12 +150,5 @@ status:
 
 
 
-To Build : 
+To Build : mvn clean install -Dmaven.test.skip=true -Dgpg.skip=true -Dmaven.javadoc.skip=true 
 ----------
-
-mvn clean install \
-  -DskipTests \
-  -Dgpg.skip=true \
-  -Dmaven.javadoc.skip=true \
-  -pl workflow-engine/registration-processor-workflow-manager-service \
-  -am
