@@ -234,7 +234,7 @@ ENV loader_path_env=${loader_path}
 
 ENV current_module_env=id-repository-identity-service
 
-ADD target/${current_module_env}-*.jar ${current_module_env}.jar
+ADD target/${current_module_env}-1.3.0.jar ${current_module_env}.jar
 
 ADD configure_start.sh configure_start.sh
 
