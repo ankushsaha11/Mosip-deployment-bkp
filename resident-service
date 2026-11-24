@@ -149,7 +149,7 @@ status:
 
 
 
-To build the package jar file : mvn clean package -Dmaven.javadoc.skip=true -DskipTests
+To build the package jar file : mvn clean package -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Dgpg.skip=true
 -------------------------------
 
 
