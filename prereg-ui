@@ -1,5 +1,157 @@
-prereg-ui:
- Image:      docker.io/mosipid/pre-registration-ui:1.2.0.1
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "4"
+    meta.helm.sh/release-name: prereg-ui
+    meta.helm.sh/release-namespace: prereg
+  creationTimestamp: "2026-11-12T08:05:14Z"
+  generation: 4
+  labels:
+    app.kubernetes.io/component: mosip
+    app.kubernetes.io/instance: prereg-ui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prereg-ui
+    helm.sh/chart: prereg-ui-1.3.0
+  name: prereg-ui
+  namespace: prereg
+  resourceVersion: "12351167"
+  uid: 3b78babb-19b6-41a9-acce-27e18c209dd5
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: prereg-ui
+      app.kubernetes.io/name: prereg-ui
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        cattle.io/timestamp: "2026-11-20T12:40:46Z"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: prereg-ui
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: prereg-ui
+        helm.sh/chart: prereg-ui-1.3.0
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: prereg-ui
+                  app.kubernetes.io/name: prereg-ui
+              namespaces:
+              - prereg
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: container_user
+          value: mosip
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms1200M -Xmx1200M
+        envFrom:
+        - configMapRef:
+            name: global
+        - configMapRef:
+            name: config-server-share
+        - configMapRef:
+            name: artifactory-share
+        image: docker.io/mosipid/pre-registration-ui:1.3.0
+        imagePullPolicy: Always
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - sh
+              - -c
+              - sleep 30
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /pre-registration-ui/
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: prereg-ui
+        ports:
+        - containerPort: 8080
+          name: spring-service
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /pre-registration-ui/
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 300m
+            memory: 1500Mi
+          requests:
+            cpu: 200m
+            memory: 20Mi
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /pre-registration-ui/
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: usr/share/nginx/html/assets/config.json
+          name: conf-file
+          subPath: config.json
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: prereg-ui
+      serviceAccountName: prereg-ui
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: prereg-ui
+        name: conf-file
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-11-18T06:58:24Z"
+    lastUpdateTime: "2026-11-18T06:58:24Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2026-11-12T08:05:14Z"
+    lastUpdateTime: "2026-11-20T12:40:57Z"
+    message: ReplicaSet "prereg-ui-78c7fd55ff" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 4
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
 
 
 
